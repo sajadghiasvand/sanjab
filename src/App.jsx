@@ -11,11 +11,7 @@ function App() {
         <div className="menu-toggle">☰</div>
 
         <div className="logo-section">
-          <img src="/logo.svg" alt="Sanjab Logo" className="logo-img" />
-          <div className="brand-name">
-            <h2>Sanjab</h2>
-            <p>سنجاب</p>
-          </div>
+          <img src="/images/logo.png" alt="لوگو" />
         </div>
 
 
@@ -37,11 +33,14 @@ function App() {
             <strong>021-55120088</strong>
           </div>
           <div className="social-icons">
-            <a href="#"><i className="fab fa-instagram"></i></a>
-            <a href="#"><i className="fab fa-facebook"></i></a>
-            <a href="#"><i className="fab fa-whatsapp"></i></a>
-            <a href="#"><i className="fab fa-telegram"></i></a>
-            <a href="#"><i className="fab fa-youtube"></i></a>
+            <a href="#"><i className="fab fa-instagram">
+              <img src="/images/instagram.png" alt="فیس بوک" /></i></a>
+            <a href="#"><i className="fab fa-facebook">
+              <img src="/images/facebook.png" alt="بنر اصلی سایت" /> </i></a>
+            <a href="#"><i className="fab fa-whatsapp">
+              <img src="/images/whatsapp.png" alt="بنر اصلی سایت" /> </i></a>
+            <a href="#"><i className="fab fa-youtube">
+              <img src="/images/youtube.png" alt="بنر اصلی سایت" /></i></a>
           </div>
         </div>
       </header>
@@ -53,6 +52,13 @@ function App() {
             <br />
             مشتریان وفادارتر
           </h2>
+          <div className='ability-image'>
+            <img src="/images/ability.png" alt="بنر اصلی سایت" />
+          </div>
+          <div className='ability-image2'>
+            <img src="/images/Rocket 1.png" alt="بنر اصلی سایت" />
+
+          </div>
         </div>
 
         <div className='p-Ability'>
@@ -67,6 +73,19 @@ function App() {
         </div>
 
         <div className='about-sanjab'>
+          <div className='about-image'>
+            <img src="/images/aboutsanjab.png" alt="بنر اصلی سایت" />
+          </div>
+
+          <div className='about-image2'>
+            <img src="/images/about.png" alt="بنر اصلی سایت" />
+          </div>
+
+          <div className='about-image3'>
+            <img src="/images/PLANT 1.png" alt="بنر اصلی سایت" />
+
+          </div>
+
           <div className='about-sanjb-app'>
             <h3>درباره سامانه سنجاب</h3>
           </div>
@@ -101,6 +120,11 @@ function App() {
       </div>
       <div className="benefits-list">
         <div className="benefit-item">
+
+          <div className='benefit5'>
+            <img src="/images/benefit5.png" alt="بنر اصلی سایت" />
+
+          </div>
           <p>
             ارسال پیامک خودکار بعد از
             هر خرید، پیام کش بک یا
@@ -108,6 +132,11 @@ function App() {
           </p>
         </div>
         <div className="benefit-item">
+
+          <div className='benefit4'>
+            <img src="/images/benefit4.png" alt="بنر اصلی سایت" />
+
+          </div>
           <p>
             تعریف طرح های متنوع
             وفاداری اعتبار، کش بک،
@@ -116,6 +145,11 @@ function App() {
           </p>
         </div>
         <div className="benefit-item">
+
+          <div className='benefit3'>
+            <img src="/images/benefit3.png" alt="بنر اصلی سایت" />
+
+          </div>
           <p>
             گزارش دقیق روزانه ببین هر
             مشتری چندبار برگشته،
@@ -124,6 +158,10 @@ function App() {
           </p>
         </div>
         <div className="benefit-item">
+          <div className='benefit2'>
+            <img src="/images/benefit2.png" alt="بنر اصلی سایت" />
+
+          </div>
           <p>
             مشاهده و تحلیل لیست
             مشتریان مشتری هارو
@@ -132,6 +170,10 @@ function App() {
           </p>
         </div>
         <div className="benefit-item">
+          <div className='benefit1'>
+            <img src="/images/benefit1.png" alt="بنر اصلی سایت" />
+
+          </div>
           <p>
             پنل اختصاصی مدیریت پنل
             ساده و حرفه ای برای
@@ -144,16 +186,16 @@ function App() {
         <h3>کاربرد های سامانه سنجاب</h3>
         <h2>سنجاب چطور به رشد کسب و کار شما کمک می کنه؟</h2>
         <div className='use-cases-list'>
-         <p>
+          <p>
             اشتراک گذاری
-            <br/>
-             باشگاه مشتریان
+            <br />
+            باشگاه مشتریان
           </p>
         </div>
         <div className='use-cases-list'>
           <p>
-            طرح های تشویقی 
-            <br/>
+            طرح های تشویقی
+            <br />
             (اعتبار و کش بک)
           </p>
         </div>
@@ -215,10 +257,19 @@ function App() {
         <div className='Comments'>
           <h3>نظرات کاربران</h3>
           <h2>کسب و کار ها درباره سنجاب چی میگن؟</h2>
+          <div className='comments-image1'>
+            <img src="/images/comments1.png" alt="بنر اصلی سایت" />
+          </div>
+
           <p>با اعتبار لحظه ای سنجاب، مشتری هایی که برگشتشون
             <br />
             سخت بود برگشتن!
           </p>
+          <div className='comments-imge2'>
+            <img src="/images/comments2.png" alt="بنر اصلی سایت" />
+
+          </div>
+
           <p>کلینیک زیبایی فمیلی</p>
         </div>
       </div>
@@ -230,6 +281,10 @@ function App() {
 
       <div className='skills-training-list'>
         <div className='skills-training1'>
+          <div className='content1'>
+            <img src="/images/content1.png" alt="بنر اصلی سایت" />
+
+          </div>
           <div class="content">
             <h3>چرا میلیون ها کسب و کار در دنیا به پلتفرم های
               <br />به وفادارسازی دیجیتال اعتماد کردند؟
@@ -243,6 +298,10 @@ function App() {
         </div>
 
         <div className='skills-training2'>
+          <div className='content2'>
+            <img src="/images/content2.png" alt="بنر اصلی سایت" />
+
+          </div>
           <div class="content">
             <h3>5 مهارت کلیدی برای موفقیت کسب و کار های
               <br />خرد در بازار امروز
@@ -256,6 +315,10 @@ function App() {
         </div>
 
         <div className='skills-training3'>
+          <div className='content3'>
+            <img src="/images/content3.png" alt="بنر اصلی سایت" />
+
+          </div>
           <div class="content">
             <h3>آمار جهانی : تبلیغات مویرگی چطور فروش را چند
               <br />برابر می کند؟
@@ -274,44 +337,45 @@ function App() {
       </div>
       <div className='user-feedback-list'>
         <div className='feedback1'>
-          <p>فکر نمی کردم انقدر راحت بتونم
-            <br />
-            با دوره آفلاین یاد بگیرم.
-          </p>
-          <button>مشاهده ویدئو</button>
+          <img src="/images/user1.png" alt="بنر اصلی سایت" />
         </div>
         <div className='feedback2'>
-          <p>فکر نمی کردم انقدر راحت بتونم
-            <br />
-            با دوره آفلاین یاد بگیرم.
-          </p>
-          <button>مشاهده ویدئو</button>
+          <img src="/images/user2.png" alt="بنر اصلی سایت" />
         </div>
         <div className='feedback3'>
-          <p>فکر نمی کردم انقدر راحت بتونم
-            <br />
-            با دوره آفلاین یاد بگیرم.
-          </p>
-          <button>مشاهده ویدئو</button>
+          <img src="/images/user3.png" alt="بنر اصلی سایت" />
         </div>
         <div className='feedback4'>
-          <p>فکر نمی کردم انقدر راحت بتونم
-            <br />
-            با دوره آفلاین یاد بگیرم.
-          </p>
-          <button>مشاهده ویدئو</button>
+          <img src="/images/user4.png" alt="بنر اصلی سایت" />
 
         </div>
       </div>
 
       <div className='download-app'>
-        <h2>دکمه زیر رو بزنید و تجربه ی عالی خودتون رو بسازید</h2>
-        <h2>وقتشه یه شروع تازه داشته باشی!</h2>
-        <h3>کلیک کن و با ما یه تجربه متفاوت و جذاب بساز، منتظرتیم که باهم مسیر رو به بهترین شکل بریم</h3>
-        <div className="buttons-container">
-          <button>App store</button>
-          <button>Google Play</button>
+        <div className='app-img1'>
+          <img src="/images/Mask.png" alt="بنر اصلی سایت" />
         </div>
+        <div className='app-img2'>
+          <img src="/images/Mockup 1.png" alt="بنر اصلی سایت" />
+        </div>
+        <div className='app-img3'>
+          <img src="/images/Mockup2.png" alt="بنر اصلی سایت" />
+        </div>
+        <div className='button-p'>
+          <h2>دکمه زیر رو بزنید و تجربه ی عالی خودتون رو بسازید!</h2>
+        </div>
+        <div className='start-p'>
+          <h2>وقتشه یه شروع تازه داشته باشی!</h2>
+        </div>
+        <div className='click-p'>
+          <h3>کلیک کن و با ما یه تجربه متفاوت و جذاب بساز، منتظرتیم که باهم مسیر رو به بهترین شکل بریم!</h3>
+        </div>
+        <div className="buttons-container">
+            <img src="/images/AppStore.png" alt="بنر اصلی سایت" />
+            <img src="/images/GooglePlay.png" alt="بنر اصلی سایت" />
+        </div>
+
+
       </div>
 
       <div className="brands">
@@ -321,33 +385,52 @@ function App() {
         </div>
 
         <div className="brands-boxes">
-          <div className="brand1">           <p>تحقیقات نشان می دهد که استفاده
-            <br />
-            از نرم افزار های CRM تا 300 درصد نرخ
-            <br />
-            تبدیل فرصت به مشتری را در شرکت ها افزایش می دهد.
-          </p>
+          <div className="brand1">
+            <div className='box1'>
+              <img src="/images/box1.png" alt="بنر اصلی سایت" />
+            </div>
+            <p>تحقیقات نشان می دهد که استفاده
+              <br />
+              از نرم افزار های CRM تا 300 درصد نرخ
+              <br />
+              تبدیل فرصت به مشتری را در شرکت ها افزایش می دهد.
+            </p>
           </div>
-          <div className="brand2">           <p>تحقیقات نشان می دهد که استفاده
-            <br />
-            از نرم افزار های CRM تا 300 درصد نرخ
-            <br />
-            تبدیل فرصت به مشتری را در شرکت ها افزایش می دهد.
-          </p>
+          <div className="brand2">
+            <div className='box2'>
+              <img src="/images/box2.png" alt="بنر اصلی سایت" />
+            </div>
+
+            <p>تحقیقات نشان می دهد که استفاده
+              <br />
+              از نرم افزار های CRM تا 300 درصد نرخ
+              <br />
+              تبدیل فرصت به مشتری را در شرکت ها افزایش می دهد.
+            </p>
           </div>
-          <div className="brand3">           <p>تحقیقات نشان می دهد که استفاده
-            <br />
-            از نرم افزار های CRM تا 300 درصد نرخ
-            <br />
-            تبدیل فرصت به مشتری را در شرکت ها افزایش می دهد.
-          </p>
+          <div className="brand3">
+            <div className='box3'>
+              <img src="/images/box3.png" alt="بنر اصلی سایت" />
+            </div>
+
+            <p>تحقیقات نشان می دهد که استفاده
+              <br />
+              از نرم افزار های CRM تا 300 درصد نرخ
+              <br />
+              تبدیل فرصت به مشتری را در شرکت ها افزایش می دهد.
+            </p>
           </div>
-          <div className="brand4">           <p>تحقیقات نشان می دهد که استفاده
-            <br />
-            از نرم افزار های CRM تا 300 درصد نرخ
-            <br />
-            تبدیل فرصت به مشتری را در شرکت ها افزایش می دهد.
-          </p>
+          <div className="brand4">
+            <div className='box4'>
+              <img src="/images/box4.png" alt="بنر اصلی سایت" />
+            </div>
+
+            <p>تحقیقات نشان می دهد که استفاده
+              <br />
+              از نرم افزار های CRM تا 300 درصد نرخ
+              <br />
+              تبدیل فرصت به مشتری را در شرکت ها افزایش می دهد.
+            </p>
           </div>
         </div>
       </div>
@@ -370,7 +453,9 @@ function App() {
       <div class="footer">
         <div class="footer-top">
           <div class="about">
-            <h2>Sanjab<br />سنجاب</h2>
+            <div className='footer-logo'>
+              <img src="/images/logo.png" alt="بنر اصلی سایت" />
+            </div>
             <p>سنجاب، پلتفرم وفادارسازی و تبلیغات مویرگی
               <br />با ایجاد تجربه های جذاب، مشتریانتان را حفظ کنید.
               <br />تبلیغات هدفمند، کلید رشد و توسعه کسب و کار شما.
@@ -395,11 +480,16 @@ function App() {
             </div>
 
             <div class="social">
-              <a href="#"><i class="instagram"></i></a>
-              <a href="#"><i class="facebook"></i></a>
-              <a href="#"><i class="whatsapp"></i></a>
-              <a href="#"><i class="telegram"></i></a>
-              <a href="#"><i class="youtube"></i></a>
+              <a href="#"><i class="instagram">
+                <img src="/images/instagram1.png" alt="بنر اصلی سایت" /></i></a>
+              <a href="#"><i class="facebook">
+                <img src="/images/facebook1.png" alt="بنر اصلی سایت" /> </i></a>
+              <a href="#"><i class="whatsapp">
+                <img src="/images/whatsapp1.png" alt="بنر اصلی سایت" /></i></a>
+              <a href="#"><i class="twitter">
+                <img src="/images/twitter.png" alt="بنر اصلی سایت" /> </i></a>
+              <a href="#"><i class="youtube">
+                <img src="/images/youtube1.png" alt="بنر اصلی سایت" /> </i></a>
             </div>
           </div>
         </div>
