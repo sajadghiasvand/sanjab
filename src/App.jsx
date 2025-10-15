@@ -15,7 +15,7 @@ function App() {
         </div>
 
 
-        <div class="contact-circle"></div>
+        <div className="contact-circle"></div>
 
 
         <nav className="nav-menu">
@@ -102,6 +102,9 @@ function App() {
               تازه می تونی مشتری هات رو با کسب و کار های هم راستا به اشتراک بزاری.
               <br />
               مثلا اگر کلینیک زیبایی داری، مشتری هات رو به فروشگاه لوازم نوزاد معرفی کنی و برعکس.
+              <br />
+              <br />
+              این یعنی تبلیغات مویرگی، اما دقیق و هدفمند.
             </p>
           </div>
 
@@ -185,39 +188,38 @@ function App() {
       <div className='use-cases'>
         <h3>کاربرد های سامانه سنجاب</h3>
         <h2>سنجاب چطور به رشد کسب و کار شما کمک می کنه؟</h2>
-        <div className='use-cases-list'>
+        <div className='use-cases-list1'>
           <p>
-            اشتراک گذاری
-            <br />
+       اشتراک گذاری
             باشگاه مشتریان
           </p>
         </div>
-        <div className='use-cases-list'>
+        <div className='use-cases-list2'>
           <p>
             طرح های تشویقی
-            <br />
             (اعتبار و کش بک)
           </p>
         </div>
-        <div className='use-cases-list'>
+        <div className='use-cases-list3'>
           <p>
             سامانه پیامک هوشمند
           </p>
         </div>
+        <div className='use-cases-p'>
+          <p>با سنجاب، می تونی باشگاه مشتریانت رو با مجموعه های دیگه به اشتراگ بذاری، یا حتی
+            <br />
+            بین بخش های مختلف کسب و کار خودت
+            <br />
+            مثلا اگر چند شعبه، کیلینیک یا فروشگاه داری، مشتری هارو بینشون بچرخونی و امتیاز
+            <br />
+            مشترک تعریف کنی .
+            <br />
+            یا اینکه با برند های هم راستا همکاری کنی و مشتری هارو به هم معرفی کنین.
+            <br />
+            ما زیرساخت این هم کاری هوشمند رو فراهم کریدم، به سادگی یک کلیک.
 
-        <p>با سنجاب، می تونی باشگاه مشتریانت رو با مجموعه های دیگه به اشتراگ بذاری، یا حتی
-          <br />
-          بین بخش های مختلف کسب و کار خودت
-          <br />
-          مثلا اگر چند شعبه، کیلینیک یا فروشگاه داری، مشتری هارو بینشون بچرخونی و امتیاز
-          <br />
-          مشترک تعریف کنی .
-          <br />
-          یا اینکه با برند های هم راستا همکاری کنی و مشتری هارو به هم معرفی کنین.
-          <br />
-          ما زیرساخت این هم کاری هوشمند رو فراهم کریدم، به سادگی یک کلیک.
-
-        </p>
+          </p>
+        </div>
         <div className='extra-points'>
           <div><span className="check">✔️</span> اشتراک باشگاه بین چند مجموعه</div>
           <div><span className="check">✔️</span> اشتراک باشگاه داخل یک مجموعه (مثلا چند شعبه)</div>
@@ -231,7 +233,6 @@ function App() {
         <h2>درخواست مشاوره و دمو رایگان</h2>
         <p>
           فقط کافیه شماره تو بزاری؛ ما باهات تماس می گیریم، ما کامل برات
-          <br />
           توضیح می دیم، و اگر خواستی همون روز برات راه اندازی می کنیم.
         </p>
 
@@ -371,8 +372,12 @@ function App() {
           <h3>کلیک کن و با ما یه تجربه متفاوت و جذاب بساز، منتظرتیم که باهم مسیر رو به بهترین شکل بریم!</h3>
         </div>
         <div className="buttons-container">
+          <div className='app-store'>
             <img src="/images/AppStore.png" alt="بنر اصلی سایت" />
+          </div>
+          <div className='google-play'>
             <img src="/images/GooglePlay.png" alt="بنر اصلی سایت" />
+          </div>
         </div>
 
 
@@ -383,6 +388,7 @@ function App() {
           <h3>همراهان سنجاب</h3>
           <h2>در کنار بهترین ها با شما هستیم</h2>
         </div>
+
 
         <div className="brands-boxes">
           <div className="brand1">
@@ -457,27 +463,37 @@ function App() {
               <img src="/images/logo.png" alt="بنر اصلی سایت" />
             </div>
             <p>سنجاب، پلتفرم وفادارسازی و تبلیغات مویرگی
-              <br />با ایجاد تجربه های جذاب، مشتریانتان را حفظ کنید.
-              <br />تبلیغات هدفمند، کلید رشد و توسعه کسب و کار شما.
+              با ایجاد تجربه های جذاب، مشتریانتان را حفظ کنید.
+              تبلیغات هدفمند، کلید رشد و توسعه کسب و کار شما.
             </p>
           </div>
 
           <div class="contact-info">
-            <p>شماره تماس</p>
-            <h2>021-55120088</h2>
-            <p>پست الکترونیک</p>
-            <h2>info@Sanjab.ir</h2>
+            <div className='phone'>
+              <p>شماره تماس</p>
+              <h2>021-55120088</h2>
+              <img src="/images/phone.png" alt="بنر اصلی سایت" />
+            </div>
+            <div className='email'>
+              <p>پست الکترونیک</p>
+              <h2>info@Sanjab.ir</h2>
+              <img src="/images/email.png" alt="بنر اصلی سایت" />
+            </div>
           </div>
 
-          <div class="vertical-line"></div>
+          <div class="vertical-line">
+            <img src="/images/Line 65.png" alt="بنر اصلی سایت" />
+
+          </div>
 
           <div class="membership">
             <h2>همیشه از سنجاب باخبر باشید</h2>
-            <p>برای اطلاع از برنامه ها و اخبار جدید، عضو شوید</p>
+            <p>برای اطلاع از برنامه ها و اخبار جدید، می تونید عضو بشید</p>
             <div class="membership-input-group">
               <input type="text" placeholder="ایمیل خود را وارد کنید" />
               <button>عضویت</button>
             </div>
+
 
             <div class="social">
               <a href="#"><i class="instagram">
@@ -493,10 +509,15 @@ function App() {
             </div>
           </div>
         </div>
+        <div className='line'>
+          <img src="/images/Line 65.png" alt="بنر اصلی سایت" />
+        </div>
 
-        <p class="copy-right">
-          کلیه حقوق متعلق به مجموعه سامانه تبلیغات سنجاب می باشد.
-        </p>
+        <div className="copy-right">
+          <p>
+            کلیه حقوق متعلق به مجموعه سامانه تبلیغات سنجاب می باشد.
+          </p>
+        </div>
       </div>
 
 
