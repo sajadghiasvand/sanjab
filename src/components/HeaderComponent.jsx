@@ -146,19 +146,19 @@ export default function HeaderComponent() {
                     <div className="flex flex-row items-center gap-5">
                         {/* Contact Information Block */}
                         <div className="flex items-center gap-4 rounded-2xl px-5 py-3">
-                            <img src="/images/Support.png" alt="Contact" className="w-10 h-10" />
+                            <img src="/images/Support.png" alt="Contact" />
                         </div>
 
                         {/* Social Media Icons */}
                         <div className="flex items-center gap-3">
                             <a href="#" className="w-10 h-10 border-[#EEE8DF] border-[1.5px] rounded-[10px] flex items-center justify-center hover:opacity-80 transition-opacity">
-                                <img src="/images/Instagram.png" alt="Instagram" className="w-6 h-6 object-contain" />
+                                <img src="/images/instagram.png" alt="Instagram" className="w-6 h-6 object-contain" />
                             </a>
                             <a href="#" className="w-10 h-10 border-[#EEE8DF] border-[1.5px] rounded-[10px] flex items-center justify-center hover:opacity-80 transition-opacity">
-                                <img src="/images/Facebook.png" alt="Facebook" className="w-6 h-6 object-contain" />
+                                <img src="/images/facebook.png" alt="Facebook" className="w-6 h-6 object-contain" />
                             </a>
                             <a href="#" className="w-10 h-10 border-[#EEE8DF] border-[1.5px] rounded-[10px] flex items-center justify-center hover:opacity-80 transition-opacity">
-                                <img src="/images/Whatsapp.png" alt="WhatsApp" className="w-6 h-6 object-contain" />
+                                <img src="/images/whatsapp.png" alt="WhatsApp" className="w-6 h-6 object-contain" />
                             </a>
                             <a href="#" className="w-10 h-10 border-[#EEE8DF] border-[1.5px] rounded-[10px] flex items-center justify-center hover:opacity-80 transition-opacity">
                                 <img src="/images/youtube.png" alt="YouTube" className="w-6 h-6 object-contain" />

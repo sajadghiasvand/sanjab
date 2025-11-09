@@ -27,7 +27,7 @@ export default function AppsComponent() {
                     <div className="w-full lg:w-1/2"></div>
 
                     {/* Right Half - Content */}
-                    <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-end text-center lg:text-right bottom-0 absolute top-0">
+                    <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-end text-center lg:text-right bottom-0 absolute top-0 sm:relative">
                         {/* Main Headline */}
                         <h2 className="text-[30px] font-bold text-[#313033] leading-[1.3] mt-8">
                             آماده اید؟ شروع یک تجربه عالی
