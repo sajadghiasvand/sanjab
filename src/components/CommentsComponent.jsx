@@ -2,22 +2,22 @@ export default function CommentsComponent() {
     const testimonials = [
         {
             image: "/images/Ellipse 94.png",
-            quote: "فکر نمیکردم انقدر راحت بتونم با دوره آفلاین یاد بگیرم",
+            quote: "سنجاب باعث شد مشتری‌هایی که فکر می‌کردیم از دست رفتن، دوباره برگردن",
             gradient: "from-gray-100 to-gray-200"
         },
         {
             image: "/images/Ellipse 94.png",
-            quote: "فکر نمیکردم انقدر راحت بتونم با دوره آفلاین یاد بگیرم",
+            quote: "با کش‌بک سنجاب، مشتریان دفعات بیشتری به فروشگاه ما برگشتند",
             gradient: "from-orange-100 to-orange-200"
         },
         {
             image: "/images/Ellipse 94.png",
-            quote: "فکر نمیکردم انقدر راحت بتونم با دوره آفلاین یاد بگیرم",
+            quote: "اشتراک‌گذاری سنجاب هزینه تبلیغات ما را کم کرد و بازخورد بهتری آورد",
             gradient: "from-gray-300 to-gray-400"
         },
         {
             image: "/images/Ellipse 94.png",
-            quote: "فکر نمیکردم انقدر راحت بتونم با دوره آفلاین یاد بگیرم",
+            quote: "گزارش‌ها و تحلیل‌های دقیق، دید خوبی برای افزایش فروش به ما داد",
             gradient: "from-gray-100 to-gray-200"
         }
     ];
@@ -25,39 +25,30 @@ export default function CommentsComponent() {
     return (
         <section className="relative w-full bg-white py-12 lg:py-20">
             <div className="container max-w-[1150px] mx-auto px-5 lg:px-0">
-                {/* Header Section */}
                 <div className="text-center mb-12 lg:mb-16">
-                    {/* Top Line with Decorative Element */}
                     <div className="flex items-center justify-center gap-2 mb-4">
                         <span className="text-[16px] text-[#313033] font-light normal whitespace-nowrap">نظرات مشتریان ما</span>
                         <img src="/images/Line 65.png" alt="Vector" />
                     </div>
 
-                    {/* Main Title */}
                     <h2 className="text-[30px] font-bold text-[#313033] leading-[1.3]">
-                        در مورد سنجاب چه میگویند؟
+                        کسب‌وکارها درباره سنجاب چه می‌گویند؟
                     </h2>
                 </div>
 
-                {/* Testimonial Cards */}
                 <div className="flex flex-nowrap lg:grid lg:grid-cols-4 gap-5 overflow-x-auto lg:overflow-x-visible scrollbar-hide pb-4 lg:pb-0 -mx-5 lg:mx-0 px-5 lg:px-0">
                     {testimonials.map((testimonial, index) => (
                         <div
                             key={index}
                             className={`bg-gradient-to-b ${testimonial.gradient} rounded-[2rem] shadow-lg overflow-hidden p-6 lg:p-8 relative h-[350px] flex-shrink-0 w-[70vw] sm:w-[400px] lg:w-auto`}
                         >
-                            {/* Portrait Image */}
-
                             <img
                                 src={testimonial.image}
                                 alt="Customer"
                                 className="w-full h-full object-cover absolute inset-0"
                             />
 
-
-
                             <div className="absolute bottom-4 left-5 right-5 z-10">
-                                {/* Quote Text */}
                                 <div className="mb-4 lg:mb-6 pr-0 pt-4 flex flex-col items-end gap-2 justify-center">
                                     <img src="/images/Qoute.svg" alt="Quote" />
                                     <p className="text-[18px] text-[#fff] font-medium normal text-right" style={{ direction: 'rtl' }}>
@@ -65,7 +56,6 @@ export default function CommentsComponent() {
                                     </p>
                                 </div>
 
-                                {/* Watch Video Button */}
                                 <div className="flex items-center justify-end gap-3">
                                     <span className="text-[14px] text-[#fff] font-light normal whitespace-nowrap">
                                         مشاهده ویدئو
