@@ -1,7 +1,6 @@
 const socialLinks = [
-    { href: '#', src: '/images/instagram.png', alt: 'Instagram' },
-    { href: '#', src: '/images/whatsapp.png', alt: 'WhatsApp' },
-    { href: '#', src: '/images/rubika.svg', alt: 'Rubika' },
+    { href: 'https://www.instagram.com/sanjab.app?stkn=NnJpN3czNWdicnIz', src: '/images/instagram.png', alt: 'Instagram' },
+    { href: 'https://wa.me/989303828200', src: '/images/whatsapp.png', alt: 'WhatsApp' },
 ];
 
 export default function FooterComponent() {
@@ -47,6 +46,8 @@ export default function FooterComponent() {
                                 <a
                                     key={social.alt}
                                     href={social.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="w-10 h-10 rounded-lg bg-[#F5F5F5] border border-[#E0E0E0] flex items-center justify-center hover:bg-gray-100 transition-colors"
                                 >
                                     <img

@@ -9,9 +9,8 @@ const navLinks = [
 ];
 
 const socialLinks = [
-    { href: '#', src: '/images/instagram.png', alt: 'Instagram' },
-    { href: '#', src: '/images/whatsapp.png', alt: 'WhatsApp' },
-    { href: '#', src: '/images/rubika.svg', alt: 'Rubika' },
+    { href: 'https://www.instagram.com/sanjab.app?stkn=NnJpN3czNWdicnIz', src: '/images/instagram.png', alt: 'Instagram' },
+    { href: 'https://wa.me/989303828200', src: '/images/whatsapp.png', alt: 'WhatsApp' },
 ];
 
 export default function HeaderComponent() {
@@ -120,6 +119,8 @@ export default function HeaderComponent() {
                                         <a
                                             key={social.alt}
                                             href={social.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                             className="w-10 h-10 border-[#EEE8DF] border-[1.5px] rounded-[10px] flex items-center justify-center hover:opacity-80 transition-opacity"
                                         >
                                             <img src={social.src} alt={social.alt} className="w-5 h-5 object-contain" />
@@ -134,11 +135,11 @@ export default function HeaderComponent() {
                 {/* Desktop Layout */}
                 <div className="hidden lg:flex flex-row items-center justify-between gap-8">
                     <div className="flex flex-row items-center gap-5">
-                        <a href="tel:09303828200" className="flex items-center gap-3 rounded-2xl px-2 py-2 hover:opacity-90 transition-opacity">
-                            <img src="/images/Support.png" alt="Contact" />
+                        <a href="tel:09303828200" className="flex-shrink-0 flex items-center gap-2">
+                            <img src="/images/supportMobile.png" alt="Support" className="w-10 h-10" />
                             <div className="text-right" style={{ direction: 'rtl' }}>
-                                <p className="text-[13px] text-[#313033]/70 leading-none mb-1">مشاوره رایگان</p>
-                                <p className="text-[16px] font-bold text-[#313033] tracking-wide" dir="ltr">09303828200</p>
+                                <p className="text-[11px] text-[#313033]/70 leading-none mb-0.5">مشاوره رایگان</p>
+                                <p className="text-[13px] font-bold text-[#313033] tracking-wide" dir="ltr">09303828200</p>
                             </div>
                         </a>
 
@@ -147,6 +148,8 @@ export default function HeaderComponent() {
                                 <a
                                     key={social.alt}
                                     href={social.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="w-10 h-10 border-[#EEE8DF] border-[1.5px] rounded-[10px] flex items-center justify-center hover:opacity-80 transition-opacity"
                                 >
                                     <img src={social.src} alt={social.alt} className="w-6 h-6 object-contain" />
