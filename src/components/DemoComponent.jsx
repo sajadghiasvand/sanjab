@@ -20,7 +20,7 @@ export default function DemoComponent() {
                         }}
                     ></div>
 
-                    <div className="relative z-10 rounded-2xl p-6 lg:p-8 w-full lg:w-1/2 max-w-lg">
+                    <div className="relative top-[100px] lg:top-0 z-10 rounded-2xl p-6 lg:p-8 w-full lg:w-1/2 max-w-lg">
                         <div className="text-center mb-8 lg:mb-6">
                             <div className="flex items-center justify-center lg:justify-end gap-3 mb-4">
                                 <span className="text-[16px] text-[#151231] font-light normal whitespace-nowrap">
@@ -29,7 +29,7 @@ export default function DemoComponent() {
                                 <img src="/images/Line 65.png" alt="Vector" />
                             </div>
 
-                            <h2 className="text-[24px] lg:text-[30px] whitespace-nowrap text-center lg:text-right font-bold text-[#151231] leading-[1.3] mb-4 lg:mb-6">
+                            <h2 dir="rtl" className="text-[24px] lg:text-[30px] whitespace-normal lg:whitespace-nowrap text-center lg:text-right font-bold text-[#151231] leading-[1.3] mb-4 lg:mb-6">
                                 درخواست مشاوره و دمو رایگان
                             </h2>
 

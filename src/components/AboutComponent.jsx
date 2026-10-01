@@ -31,23 +31,23 @@ export default function AboutComponent() {
                                 </h3>
 
                                 <div className="flex flex-col lg:flex-row-reverse gap-3 lg:gap-4 items-stretch lg:items-center">
-                                    <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 flex-1">
+                                    <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 flex-1 min-w-0">
                                         <input
                                             type="text"
                                             placeholder="نام و نام خانوادگی"
                                             style={{ direction: 'rtl' }}
-                                            className="flex-1 px-4 h-[45px] py-3.5 lg:py-4 rounded-[30px] bg-white border border-decorative-gray/70 text-[#313033] placeholder:text-decorative-gray focus:outline-none focus:ring-2 focus:ring-white/50 text-sm lg:text-base"
+                                            className="flex-1 min-w-0 w-full px-4 h-[45px] py-3.5 lg:py-4 rounded-[30px] bg-white border border-decorative-gray/70 text-[#313033] placeholder:text-decorative-gray focus:outline-none focus:ring-2 focus:ring-white/50 text-sm lg:text-base"
                                         />
 
                                         <input
                                             type="tel"
                                             placeholder="شماره تماس"
                                             style={{ direction: 'rtl' }}
-                                            className="flex-1 px-4 h-[45px] rounded-[30px] py-3.5 lg:py-4 bg-white border border-decorative-gray/70 text-[#313033] placeholder:text-decorative-gray focus:outline-none focus:ring-2 focus:ring-white/50 text-sm lg:text-base"
+                                            className="flex-1 min-w-0 w-full px-4 h-[45px] rounded-[30px] py-3.5 lg:py-4 bg-white border border-decorative-gray/70 text-[#313033] placeholder:text-decorative-gray focus:outline-none focus:ring-2 focus:ring-white/50 text-sm lg:text-base"
                                         />
                                     </div>
 
-                                    <button className="w-full h-[45px] rounded-[30px] flex items-center justify-center lg:w-auto px-6 lg:px-8 py-3.5 lg:py-4 bg-[#313033] text-white font-medium hover:bg-[#313033]/90 transition-colors shadow-lg text-sm lg:text-base whitespace-nowrap">
+                                    <button className="w-full h-[45px] rounded-[30px] flex items-center justify-center lg:w-auto lg:shrink-0 px-6 lg:px-8 py-3.5 lg:py-4 bg-[#313033] text-white font-medium hover:bg-[#313033]/90 transition-colors shadow-lg text-sm lg:text-base whitespace-nowrap">
                                         درخواست مشاوره رایگان
                                     </button>
                                 </div>
