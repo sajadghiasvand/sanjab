@@ -1,22 +1,22 @@
 export default function CommentsComponent() {
     const testimonials = [
         {
-            image: "/images/Ellipse 94.png",
+            image: "/images/cards/customer-1.jpg",
             quote: "سنجاب باعث شد مشتری‌هایی که فکر می‌کردیم از دست رفتن، دوباره برگردن",
             gradient: "from-gray-100 to-gray-200"
         },
         {
-            image: "/images/Ellipse 94.png",
+            image: "/images/cards/customer-2.jpg",
             quote: "با کش‌بک سنجاب، مشتریان دفعات بیشتری به فروشگاه ما برگشتند",
             gradient: "from-orange-100 to-orange-200"
         },
         {
-            image: "/images/Ellipse 94.png",
+            image: "/images/cards/customer-3.jpg",
             quote: "اشتراک‌گذاری سنجاب هزینه تبلیغات ما را کم کرد و بازخورد بهتری آورد",
             gradient: "from-gray-300 to-gray-400"
         },
         {
-            image: "/images/Ellipse 94.png",
+            image: "/images/cards/customer-4.jpg",
             quote: "گزارش‌ها و تحلیل‌های دقیق، دید خوبی برای افزایش فروش به ما داد",
             gradient: "from-gray-100 to-gray-200"
         }
@@ -44,9 +44,12 @@ export default function CommentsComponent() {
                         >
                             <img
                                 src={testimonial.image}
-                                alt="Customer"
+                                alt="تصویر نمونه کسب‌وکار"
                                 className="w-full h-full object-cover absolute inset-0"
+                                loading="lazy"
                             />
+
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
                             <div className="absolute bottom-4 left-5 right-5 z-10">
                                 <div className="mb-4 lg:mb-6 pr-0 pt-4 flex flex-col items-end gap-2 justify-center">

@@ -2,7 +2,7 @@ export default function DemoComponent() {
     return (
         <section id="contact" className="relative w-full mt-16 scroll-mt-24">
             <div className="container max-w-[1150px] mx-auto p-5">
-                <div className="relative w-full rounded-2xl p-6 lg:p-10 flex flex-col lg:flex-row items-center justify-end min-h-[720px] sm:min-h-[420px] lg:h-[420px] overflow-hidden">
+                <div className="relative w-full rounded-2xl p-6 lg:p-10 flex flex-col lg:flex-row items-center justify-center lg:justify-end min-h-[720px] sm:min-h-[420px] lg:h-[420px] overflow-hidden">
                     <div
                         className="lg:hidden absolute inset-0 rounded-2xl"
                         style={{

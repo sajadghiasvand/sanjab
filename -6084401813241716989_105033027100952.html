@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>خرید دستگاه پوز سنجاب</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --orange:#DC4D01; --orange-dark:#B23F01; --orange-light:#FF8A3D;
+    --salmon:#F9BB9B; --salmon-light:#FDEAE0;
+    --ink:#241C18; --ink-soft:#6B5F58; --ink-faint:#A79A92;
+    --paper:#FBF8F6; --card:#FFFFFF; --line:#EFE3DB;
+    --green:#2E8B57; --green-light:#E9F5EE;
+    --red:#B15353; --red-light:#F7EAEA;
+    --blue:#3B6FA0; --blue-light:#EAF1F8;
+    --purple:#7B5CA8; --purple-light:#F1ECF7;
+    --shadow:0 2px 12px rgba(36,28,24,0.06),0 1px 2px rgba(36,28,24,0.04);
+    --shadow-lg:0 16px 40px rgba(220,77,1,0.14),0 3px 10px rgba(36,28,24,0.07);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ font-family:'Vazirmatn',sans-serif; background:var(--paper); color:var(--ink); line-height:1.6; }
+  a{ color:inherit; text-decoration:none; }
+  button{ cursor:pointer; }
+
+  .switcher-bar{ position:sticky; top:0; z-index:60; background:var(--card); border-bottom:1px solid var(--line); padding:10px 16px; }
+  .switcher{ max-width:380px; margin:0 auto; display:flex; background:var(--paper); border-radius:12px; padding:4px; box-shadow:var(--shadow); }
+  .switcher button{ flex:1; border:none; background:transparent; padding:9px 8px; font-family:inherit; font-size:13px; font-weight:700; color:var(--ink-soft); border-radius:9px; transition:all .2s; }
+  .switcher button.active{ background:var(--orange); color:#fff; }
+
+  .view{ display:none; }
+  .view.active{ display:block; }
+
+  /* ============================= CUSTOMER VIEW ============================= */
+  .cwrap{ max-width:640px; margin:0 auto; padding:0 20px 60px; }
+  .top-logo{ display:flex; align-items:center; gap:8px; font-weight:800; font-size:16px; padding:16px 0 6px; }
+  .top-logo .dot{ width:9px; height:9px; border-radius:50%; background:var(--orange); }
+
+  .hero-simple{ text-align:center; padding:20px 0 26px; }
+  .device-mini{ width:120px; height:150px; margin:0 auto 20px; background:linear-gradient(160deg,#2A2320,var(--ink)); border-radius:18px; position:relative; box-shadow:0 16px 34px rgba(36,28,24,0.22); }
+  .device-mini::before{ content:''; position:absolute; top:14px; left:14px; right:14px; bottom:44px; background:linear-gradient(150deg,var(--orange),var(--orange-light)); border-radius:9px; }
+  .device-mini::after{ content:'سنجاب'; position:absolute; top:28px; left:0; right:0; text-align:center; color:#fff; font-weight:800; font-size:10.5px; }
+  .hero-simple h1{ font-size:22px; font-weight:800; line-height:1.5; }
+  .hero-simple h1 span{ color:var(--orange); }
+  .hero-simple p{ font-size:13px; color:var(--ink-soft); margin-top:10px; max-width:420px; margin-inline:auto; }
+
+  .price-block{ background:var(--card); border:1px solid var(--line); border-radius:20px; padding:22px; margin-top:22px; box-shadow:var(--shadow); text-align:center; }
+  .discount-tag{ display:inline-block; background:var(--orange); color:#fff; font-size:12px; font-weight:700; padding:5px 13px; border-radius:9px; margin-bottom:12px; }
+  .price-line{ display:flex; align-items:baseline; justify-content:center; gap:10px; flex-wrap:wrap; }
+  .price-old{ font-size:14px; color:var(--ink-faint); text-decoration:line-through; }
+  .price-new{ font-size:27px; font-weight:800; color:var(--orange-dark); }
+  .price-unit{ font-size:13px; color:var(--ink-soft); }
+  .cd-row{ display:flex; gap:8px; justify-content:center; margin-top:16px; }
+  .cd-cell{ background:var(--paper); border-radius:10px; padding:8px 12px; min-width:50px; }
+  .cd-cell .n{ font-size:17px; font-weight:800; }
+  .cd-cell .l{ font-size:9.5px; color:var(--ink-soft); margin-top:2px; }
+  .price-note{ font-size:11.5px; color:var(--ink-soft); margin-top:14px; }
+
+  /* special offers (dynamic campaigns) */
+  .offers-title{ font-size:13px; font-weight:800; margin:22px 0 10px; }
+  .offer-card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin-bottom:10px; }
+  .offer-card .offer-top{ display:flex; align-items:center; gap:8px; margin-bottom:5px; }
+  .offer-type-badge{ font-size:10px; font-weight:700; padding:3px 8px; border-radius:7px; }
+  .offer-type-badge.tier{ background:var(--blue-light); color:var(--blue); }
+  .offer-type-badge.bundle{ background:var(--purple-light); color:var(--purple); }
+  .offer-type-badge.custom{ background:var(--salmon-light); color:var(--orange-dark); }
+  .offer-card strong{ font-size:13.5px; font-weight:700; }
+  .offer-card .offer-body{ font-size:12px; color:var(--ink-soft); line-height:1.8; }
+  .offer-tier-row{ display:flex; justify-content:space-between; font-size:12px; padding:4px 0; border-top:1px dashed var(--line); }
+  .offer-tier-row:first-child{ border-top:none; }
+
+  .plans{ margin-top:22px; display:flex; flex-direction:column; gap:12px; }
+  .plan-row{ background:var(--card); border:1.5px solid var(--line); border-radius:16px; padding:16px 18px; display:flex; align-items:center; justify-content:space-between; gap:14px; transition:border-color .2s, transform .15s; }
+  .plan-row:active{ transform:scale(.99); }
+  .plan-row.featured{ border-color:var(--orange); }
+  .plan-row-text{ text-align:right; }
+  .plan-row-text strong{ font-size:14px; font-weight:700; display:block; }
+  .plan-row-text span{ font-size:11.5px; color:var(--ink-soft); }
+  .plan-row-cta{ background:var(--orange); color:#fff; border:none; padding:11px 18px; border-radius:11px; font-family:inherit; font-weight:700; font-size:13px; white-space:nowrap; }
+  .plan-row:not(.featured) .plan-row-cta{ background:var(--ink); }
+
+  .link-row{ display:flex; justify-content:space-between; gap:10px; margin-top:16px; flex-wrap:wrap; }
+  .text-link{ font-size:12px; color:var(--orange-dark); font-weight:700; border:none; background:transparent; padding:6px 0; }
+
+  .docs-preview{ margin-top:6px; background:var(--salmon-light); border-radius:14px; padding:14px 16px; display:none; }
+  .docs-preview.open{ display:block; }
+  .docs-preview-cols{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:10px; }
+  .docs-preview-cols h5{ font-size:12px; font-weight:800; margin-bottom:8px; }
+  .docs-preview-cols ul{ list-style:none; }
+  .docs-preview-cols li{ font-size:11.5px; color:var(--ink-soft); padding:3px 0; }
+  .docs-preview-cols li::before{ content:'• '; color:var(--orange); }
+
+  .feats-mini{ margin-top:34px; display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .feat-mini-card{ text-align:center; padding:14px 8px; }
+  .feat-mini-card .ic{ width:36px; height:36px; border-radius:10px; background:var(--salmon-light); display:flex; align-items:center; justify-content:center; font-size:16px; margin:0 auto 8px; }
+  .feat-mini-card span{ font-size:11px; color:var(--ink-soft); font-weight:600; }
+
+  footer{ text-align:center; padding:26px 20px; font-size:11px; color:var(--ink-faint); }
+
+  /* ============================= MODALS ============================= */
+  .modal-overlay{ position:fixed; inset:0; background:rgba(36,28,24,0.5); display:flex; align-items:center; justify-content:center; padding:16px; opacity:0; pointer-events:none; transition:opacity .3s; z-index:100; }
+  .modal-overlay.show{ opacity:1; pointer-events:auto; }
+  .modal-box{ background:var(--paper); border-radius:22px; width:min(440px,100%); max-height:88vh; overflow-y:auto; box-shadow:var(--shadow-lg); transform:translateY(16px); transition:transform .3s; }
+  .modal-overlay.show .modal-box{ transform:translateY(0); }
+  .modal-head{ display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--paper); }
+  .modal-head h3{ font-size:14.5px; font-weight:800; }
+  .close-btn{ width:30px; height:30px; border-radius:9px; border:none; background:#fff; box-shadow:var(--shadow); font-size:13px; color:var(--ink-soft); }
+  .modal-body{ padding:20px; }
+  .dots{ display:flex; gap:6px; justify-content:center; margin-bottom:20px; }
+  .dots span{ width:7px; height:7px; border-radius:50%; background:var(--line); }
+  .dots span.on{ background:var(--orange); }
+
+  .form-field{ margin-bottom:13px; }
+  .form-field label{ display:block; font-size:12px; font-weight:700; color:var(--ink-soft); margin-bottom:6px; }
+  .form-field input, .form-field select, .form-field textarea{ width:100%; border:1.5px solid var(--line); border-radius:12px; padding:12px 13px; font-family:inherit; font-size:13.5px; background:#fff; color:var(--ink); }
+  .form-field input:focus, .form-field select:focus, .form-field textarea:focus{ outline:none; border-color:var(--orange); }
+  .form-row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .field-err{ font-size:11px; color:var(--red); margin-top:5px; display:none; }
+  .form-field.invalid input{ border-color:var(--red); }
+  .form-field.invalid .field-err{ display:block; }
+
+  .modal-cta{ width:100%; background:var(--orange); color:#fff; border:none; padding:13px; border-radius:13px; font-family:inherit; font-weight:700; font-size:14px; margin-top:6px; }
+  .pay-loading{ text-align:center; padding:36px 10px; }
+  .spinner{ width:40px; height:40px; border-radius:50%; border:4px solid var(--salmon-light); border-top-color:var(--orange); margin:0 auto 16px; animation:spin .8s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .success-box{ text-align:center; padding:4px; }
+  .success-icon{ width:56px; height:56px; border-radius:50%; background:var(--green-light); color:var(--green); font-size:24px; display:flex; align-items:center; justify-content:center; margin:0 auto 14px; }
+  .success-box h4{ font-size:15.5px; font-weight:800; margin-bottom:5px; }
+  .success-box p{ font-size:12px; color:var(--ink-soft); margin-bottom:14px; }
+  .tracking-code{ background:#fff; border:1px dashed var(--line); border-radius:11px; padding:10px; font-family:monospace; font-weight:700; font-size:15px; letter-spacing:2px; margin-bottom:18px; direction:ltr; }
+
+  .doc-section-title{ font-size:13px; font-weight:800; text-align:right; margin-bottom:4px; }
+  .doc-section-sub{ font-size:11.5px; color:var(--ink-soft); text-align:right; margin-bottom:14px; }
+  .readiness{ display:flex; align-items:center; gap:14px; margin-bottom:16px; }
+  .ring-wrap{ position:relative; width:60px; height:60px; flex-shrink:0; }
+  .ring-wrap svg{ transform:rotate(-90deg); }
+  .ring-bg{ fill:none; stroke:var(--line); stroke-width:7; }
+  .ring-fg{ fill:none; stroke:var(--orange); stroke-width:7; stroke-linecap:round; transition:stroke-dashoffset .4s ease; }
+  .ring-txt{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:11.5px; font-weight:800; color:var(--orange-dark); }
+  .readiness-info strong{ font-size:12.5px; font-weight:700; display:block; }
+  .readiness-info span{ font-size:11px; color:var(--ink-soft); }
+
+  .doc-item{ background:#fff; border:1px solid var(--line); border-radius:13px; padding:12px 13px; margin-bottom:9px; }
+  .doc-item-top{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .doc-item-name{ display:flex; align-items:center; gap:9px; font-size:12.5px; font-weight:600; }
+  .doc-check{ width:19px; height:19px; border-radius:6px; border:1.5px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:10.5px; color:#fff; flex-shrink:0; }
+  .doc-check.done{ background:var(--green); border-color:var(--green); }
+  .doc-status{ font-size:10px; font-weight:700; padding:3px 8px; border-radius:7px; white-space:nowrap; }
+  .doc-status.pending{ background:var(--salmon-light); color:var(--orange-dark); }
+  .doc-status.uploaded{ background:var(--blue-light); color:var(--blue); }
+  .doc-status.error{ background:var(--red-light); color:var(--red); }
+  .doc-actions{ margin-top:9px; }
+  .doc-actions label{ font-size:11px; font-weight:700; border-radius:8px; padding:7px 11px; border:none; background:var(--orange); color:#fff; display:inline-block; }
+  .doc-err-msg{ font-size:10.5px; color:var(--red); margin-top:6px; }
+  .wa-btn{ display:flex; align-items:center; justify-content:center; gap:8px; background:#25D366; color:#fff; border-radius:13px; padding:12px; font-weight:700; font-size:13px; margin-bottom:14px; }
+
+  .toast{ position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:#fff; padding:11px 18px; border-radius:11px; font-size:12.5px; font-weight:600; opacity:0; transition:all .3s ease; pointer-events:none; z-index:200; white-space:nowrap; }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* ============================= ADMIN VIEW ============================= */
+  .awrap{ max-width:780px; margin:0 auto; padding:22px 20px 60px; }
+  .a-title{ font-size:19px; font-weight:800; margin-bottom:2px; }
+  .a-sub{ font-size:12.5px; color:var(--ink-soft); margin-bottom:22px; }
+  .a-card{ background:var(--card); border:1px solid var(--line); border-radius:18px; padding:20px; margin-bottom:18px; box-shadow:var(--shadow); }
+  .a-card-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:16px; }
+  .a-card-head .a-card-title{ display:flex; align-items:center; gap:10px; }
+  .a-card-head .ic{ width:36px; height:36px; border-radius:10px; background:var(--salmon-light); display:flex; align-items:center; justify-content:center; font-size:16px; }
+  .a-card-head strong{ font-size:14.5px; font-weight:700; }
+
+  .a-grid2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .a-field{ margin-bottom:12px; }
+  .a-field label{ display:block; font-size:12px; font-weight:700; color:var(--ink-soft); margin-bottom:6px; }
+  .a-field input, .a-field select, .a-field textarea{ width:100%; border:1.5px solid var(--line); border-radius:11px; padding:10px 12px; font-family:inherit; font-size:13px; background:#fff; }
+  .a-field input:focus, .a-field textarea:focus{ outline:none; border-color:var(--orange); }
+  .a-radio-row{ display:flex; gap:8px; margin-bottom:14px; }
+  .a-radio-opt{ flex:1; border:1.5px solid var(--line); border-radius:11px; padding:9px 6px; text-align:center; font-size:12px; font-weight:600; color:var(--ink-soft); }
+  .a-radio-opt.sel{ border-color:var(--orange); background:var(--salmon-light); color:var(--orange-dark); }
+  .a-save{ background:var(--orange); color:#fff; border:none; padding:11px 22px; border-radius:12px; font-family:inherit; font-weight:700; font-size:13px; margin-top:4px; }
+  .a-preview{ background:var(--salmon-light); border-radius:13px; padding:12px 14px; margin-top:14px; font-size:12px; color:var(--orange-dark); font-weight:700; }
+
+  .stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:18px; }
+  .stat-box{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 10px; text-align:center; box-shadow:var(--shadow); }
+  .stat-box .num{ font-size:19px; font-weight:800; color:var(--orange-dark); }
+  .stat-box .lbl{ font-size:10.5px; color:var(--ink-soft); margin-top:3px; }
+  .bar-chart{ display:flex; align-items:flex-end; gap:8px; height:90px; margin-top:6px; }
+  .bar-col{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; }
+  .bar-fill{ width:100%; background:var(--orange); border-radius:6px 6px 0 0; }
+  .bar-col span{ font-size:10px; color:var(--ink-soft); margin-top:6px; }
+
+  table{ width:100%; border-collapse:collapse; font-size:12px; }
+  th{ text-align:right; padding:9px 8px; color:var(--ink-soft); font-weight:700; border-bottom:1.5px solid var(--line); white-space:nowrap; }
+  td{ padding:10px 8px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  .tbl-scroll{ overflow-x:auto; }
+  .pill{ font-size:10.5px; font-weight:700; padding:4px 9px; border-radius:8px; display:inline-block; }
+  .pill.paid{ background:var(--blue-light); color:var(--blue); }
+  .pill.waiting{ background:var(--salmon-light); color:var(--orange-dark); }
+  .pill.done{ background:var(--green-light); color:var(--green); }
+  .pill.needfix{ background:var(--red-light); color:var(--red); }
+
+  /* extra-offer builder */
+  .offer-list-item{ border:1px solid var(--line); border-radius:13px; padding:12px 14px; margin-bottom:10px; }
+  .offer-list-top{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:4px; }
+  .offer-list-top strong{ font-size:13px; }
+  .offer-actions{ display:flex; gap:6px; }
+  .offer-actions button{ font-size:11px; font-weight:700; border:1px solid var(--line); background:#fff; border-radius:8px; padding:5px 10px; }
+  .status-pill{ font-size:10px; font-weight:700; padding:3px 8px; border-radius:7px; }
+  .status-pill.on{ background:var(--green-light); color:var(--green); }
+  .status-pill.off{ background:#EFEFEF; color:#8A8A8A; }
+
+  .tier-row{ display:grid; grid-template-columns:1fr 1fr auto; gap:8px; margin-bottom:8px; align-items:center; }
+  .tier-row input{ border:1.5px solid var(--line); border-radius:10px; padding:8px 10px; font-family:inherit; font-size:12.5px; }
+  .tier-remove{ background:var(--red-light); color:var(--red); border:none; border-radius:8px; width:30px; height:30px; font-weight:700; }
+  .add-tier-btn{ font-size:12px; font-weight:700; color:var(--orange-dark); background:var(--salmon-light); border:none; border-radius:9px; padding:8px 12px; margin-bottom:10px; }
+  .new-offer-form{ display:none; border-top:1px dashed var(--line); margin-top:14px; padding-top:16px; }
+  .new-offer-form.open{ display:block; }
+  .add-offer-btn{ background:var(--ink); color:#fff; border:none; padding:10px 18px; border-radius:11px; font-family:inherit; font-weight:700; font-size:12.5px; }
+
+  @media(max-width:600px){
+    .a-grid2{ grid-template-columns:1fr; }
+    .stat-grid{ grid-template-columns:1fr 1fr; }
+    .feats-mini{ grid-template-columns:1fr 1fr; }
+    .docs-preview-cols{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="switcher-bar">
+  <div class="switcher">
+    <button class="active" onclick="showView('customer', this)">فروشگاه (نمای مشتری)</button>
+    <button onclick="showView('admin', this)">پنل ادمین</button>
+  </div>
+</div>
+
+<!-- ================= CUSTOMER VIEW ================= -->
+<div class="view active" id="customer-view">
+  <div class="cwrap">
+    <div class="top-logo"><span class="dot"></span> سنجاب</div>
+
+    <div class="hero-simple">
+      <div class="device-mini"></div>
+      <h1>پوز سنجاب — ثبت فروش و <span>نگه‌داشتن مشتری</span> در یک دستگاه</h1>
+      <p>کش‌بک خودکار، یادآوری به مشتری‌های فراموش‌شده و هدیه تولد — همه از یک پنل.</p>
+    </div>
+
+    <div class="price-block">
+      <div class="discount-tag" id="discountTag">۱۵٪ تخفیف محدود</div>
+      <div class="price-line">
+        <span class="price-old" id="priceOld">۹,۸۰۰,۰۰۰ تومان</span>
+        <span class="price-new" id="priceNew">۷,۹۲۰,۰۰۰</span>
+        <span class="price-unit">تومان</span>
+      </div>
+      <div class="cd-row">
+        <div class="cd-cell"><div class="n" id="cd-d">--</div><div class="l">روز</div></div>
+        <div class="cd-cell"><div class="n" id="cd-h">--</div><div class="l">ساعت</div></div>
+        <div class="cd-cell"><div class="n" id="cd-m">--</div><div class="l">دقیقه</div></div>
+        <div class="cd-cell"><div class="n" id="cd-s">--</div><div class="l">ثانیه</div></div>
+      </div>
+      <div class="price-note">هزینه‌ی شارژ پیامک جداست و بر اساس مصرف محاسبه می‌شود</div>
+    </div>
+
+    <div id="offersWrap"></div>
+
+    <div class="plans">
+      <div class="plan-row featured">
+        <div class="plan-row-text"><strong>خرید با دستگاه پوز</strong><span>دستگاه + نصب + آموزش</span></div>
+        <button class="plan-row-cta" onclick="openPurchase('full')">خرید</button>
+      </div>
+      <div class="plan-row">
+        <div class="plan-row-text"><strong>خرید بدون دستگاه پوز</strong><span>فقط پنل و ثبت دیتا</span></div>
+        <button class="plan-row-cta" onclick="openPurchase('minimal')">خرید</button>
+      </div>
+    </div>
+
+    <div class="link-row">
+      <button class="text-link" onclick="toggleDocsPreview()">📄 چه مدارکی لازمه؟</button>
+      <button class="text-link" onclick="openResume()">↩️ قبلاً خرید کردی؟ تکمیل مدارک</button>
+    </div>
+
+    <div class="docs-preview" id="docsPreview">
+      <div style="font-size:12px; font-weight:700;">قبل از خرید فقط برای اطلاع — نیازی به آماده‌کردن الان نیست</div>
+      <div class="docs-preview-cols">
+        <div><h5>خرید با پوز (۶ مدرک)</h5><ul>
+          <li>کارت ملی (پشت و رو)</li><li>جواز کسب</li><li>سند/اجاره‌نامه</li>
+          <li>شماره شبا</li><li>کد اقتصادی (اختیاری)</li><li>عکس نمای مغازه</li>
+        </ul></div>
+        <div><h5>بدون پوز (۲ مدرک)</h5><ul>
+          <li>کارت ملی (پشت و رو)</li><li>جواز کسب</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <div class="feats-mini">
+      <div class="feat-mini-card"><div class="ic">🎁</div><span>کش‌بک خودکار</span></div>
+      <div class="feat-mini-card"><div class="ic">🔁</div><span>مشتری فراموش‌شده</span></div>
+      <div class="feat-mini-card"><div class="ic">🎂</div><span>هدیه تولد</span></div>
+    </div>
+  </div>
+  <footer>© سنجاب — این یک نمونه‌ی طراحی (پروتوتایپ) است.</footer>
+</div>
+
+<!-- ================= ADMIN VIEW ================= -->
+<div class="view" id="admin-view">
+  <div class="awrap">
+    <div class="a-title">پنل مدیریت فروشگاه پوز</div>
+    <div class="a-sub">کمپین قیمت، پیشنهادهای تکمیلی، سفارش‌ها و گزارش‌ها.</div>
+
+    <!-- Main price campaign -->
+    <div class="a-card">
+      <div class="a-card-head"><div class="a-card-title"><div class="ic">🏷️</div><strong>کمپین اصلی قیمت</strong></div></div>
+      <div class="a-grid2">
+        <div class="a-field"><label>قیمت پایه (تومان)</label><input type="number" id="a-base" value="9800000"></div>
+        <div class="a-field"><label>درصد تخفیف</label><input type="number" id="a-percent" value="15"></div>
+      </div>
+      <div class="a-field"><label>پایان تخفیف</label><input type="datetime-local" id="a-enddate"></div>
+      <div class="a-preview" id="a-preview-text">قیمت نهایی: ۷,۹۲۰,۰۰۰ تومان</div>
+      <button class="a-save" onclick="saveCampaign()">ذخیره و اعمال روی فروشگاه</button>
+    </div>
+
+    <!-- Extra offers builder -->
+    <div class="a-card">
+      <div class="a-card-head">
+        <div class="a-card-title"><div class="ic">✨</div><strong>پیشنهادهای تکمیلی</strong></div>
+        <button class="add-offer-btn" onclick="toggleNewOfferForm()">+ افزودن پیشنهاد</button>
+      </div>
+      <div style="font-size:12px; color:var(--ink-soft); margin-bottom:14px;">
+        هر پیشنهاد که این‌جا اضافه کنی، روی صفحه‌ی فروشگاه زیر قیمت اصلی نشون داده می‌شه — مثلاً «شارژ ۲۰ میلیونی، ۱۰٪ تخفیف» یا معرفی یک محصول مکمل.
+      </div>
+
+      <div id="offersAdminList"></div>
+
+      <div class="new-offer-form" id="newOfferForm">
+        <div class="a-field"><label>عنوان پیشنهاد</label><input type="text" id="o-title" placeholder="مثلاً «هرچه بیشتر شارژ کنی، بیشتر تخفیف بگیر»"></div>
+        <div class="a-field"><label>نوع پیشنهاد</label>
+          <div class="a-radio-row">
+            <div class="a-radio-opt sel" id="type-tier" onclick="selectOfferType('tier')">شارژ پلکانی</div>
+            <div class="a-radio-opt" id="type-bundle" onclick="selectOfferType('bundle')">محصول مکمل</div>
+            <div class="a-radio-opt" id="type-custom" onclick="selectOfferType('custom')">کمپین سفارشی</div>
+          </div>
+        </div>
+
+        <!-- tier fields -->
+        <div id="fields-tier">
+          <label style="font-size:12px; font-weight:700; color:var(--ink-soft); display:block; margin-bottom:8px;">پله‌های شارژ</label>
+          <div id="tierRows"></div>
+          <button class="add-tier-btn" onclick="addTierRow()">+ افزودن پله</button>
+        </div>
+
+        <!-- bundle fields -->
+        <div id="fields-bundle" style="display:none;">
+          <div class="a-field"><label>نام محصول مکمل</label><input type="text" id="o-bundle-product" placeholder="مثلاً چاپگر رسید حرارتی"></div>
+          <div class="a-field"><label>شرط دریافت</label><input type="text" id="o-bundle-condition" placeholder="مثلاً خرید همراه با دستگاه پوز"></div>
+          <div class="a-field"><label>مزیت/تخفیف</label><input type="text" id="o-bundle-benefit" placeholder="مثلاً ۳۰٪ تخفیف روی چاپگر"></div>
+        </div>
+
+        <!-- custom fields -->
+        <div id="fields-custom" style="display:none;">
+          <div class="a-field"><label>توضیح کمپین</label><textarea id="o-custom-text" rows="3" placeholder="متن آزاد کمپین رو این‌جا بنویس"></textarea></div>
+        </div>
+
+        <button class="a-save" onclick="saveNewOffer()">ذخیره پیشنهاد</button>
+      </div>
+    </div>
+
+    <!-- Reports -->
+    <div class="a-card">
+      <div class="a-card-head"><div class="a-card-title"><div class="ic">📊</div><strong>گزارش‌ها</strong></div></div>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="num">۴</div><div class="lbl">سفارش امروز</div></div>
+        <div class="stat-box"><div class="num">۲۶</div><div class="lbl">سفارش این ماه</div></div>
+        <div class="stat-box"><div class="num">۷۲٪</div><div class="lbl">تکمیل مدارک</div></div>
+        <div class="stat-box"><div class="num">۲۰۶M</div><div class="lbl">فروش این ماه</div></div>
+      </div>
+      <div style="font-size:12px; font-weight:700; color:var(--ink-soft); margin-bottom:4px;">سفارش‌های ۷ روز اخیر</div>
+      <div class="bar-chart" id="barChart"></div>
+    </div>
+
+    <!-- Orders table -->
+    <div class="a-card">
+      <div class="a-card-head"><div class="a-card-title"><div class="ic">🧾</div><strong>سفارش‌های اخیر</strong></div></div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>نام</th><th>موبایل</th><th>شهر</th><th>نوع خرید</th><th>وضعیت مدارک</th><th>وضعیت سفارش</th><th>تاریخ</th></tr></thead>
+          <tbody id="ordersBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= BUYER MODAL (no OTP) ================= -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-head"><h3 id="modalTitle">تکمیل خرید</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="dots"><span class="on" id="dot1"></span><span id="dot2"></span><span id="dot3"></span></div>
+
+      <div class="step" id="step1">
+        <div class="form-row2">
+          <div class="form-field"><label>نام</label><input type="text" id="f-name" placeholder="مثلاً علی"></div>
+          <div class="form-field"><label>نام خانوادگی</label><input type="text" id="f-lname" placeholder="مثلاً رضایی"></div>
+        </div>
+        <div class="form-field"><label>شغل / نوع کسب‌وکار</label><input type="text" id="f-job" placeholder="مثلاً کافه"></div>
+        <div class="form-field">
+          <label>شماره موبایل</label>
+          <input type="text" id="f-mobile" placeholder="۰۹xxxxxxxxx" maxlength="11" inputmode="numeric">
+          <div class="field-err">شماره موبایل معتبر نیست</div>
+        </div>
+        <div class="form-row2">
+          <div class="form-field"><label>استان</label><select id="f-province"><option value="">انتخاب کنید</option><option>قزوین</option><option>تهران</option><option>البرز</option><option>سایر</option></select></div>
+          <div class="form-field"><label>شهر</label><input type="text" id="f-city" placeholder="مثلاً قزوین"></div>
+        </div>
+        <div class="form-field"><label>آدرس کامل</label><input type="text" id="f-addr" placeholder="خیابان، کوچه، پلاک، واحد"></div>
+        <button class="modal-cta" onclick="goStep(2)">پرداخت</button>
+      </div>
+
+      <div class="step" id="step2" style="display:none;">
+        <div class="pay-loading">
+          <div class="spinner"></div>
+          <div style="font-size:13px; font-weight:700;">در حال اتصال به درگاه پرداخت...</div>
+          <div style="font-size:12px; color:var(--ink-soft); margin-top:6px;">مبلغ <span id="payAmount"></span> تومان</div>
+        </div>
+      </div>
+
+      <div class="step" id="step3" style="display:none;">
+        <div class="success-box">
+          <div class="success-icon">✓</div>
+          <h4>پرداخت با موفقیت انجام شد</h4>
+          <p>کد پیگیری رو نگه دار. اگه مدارک آماده نیست، بعداً از همین سایت با شماره موبایلت برمی‌گردی و ادامه می‌دی.</p>
+          <div class="tracking-code" id="trackCode">SNJ-000000</div>
+        </div>
+        <div class="doc-section-title">آپلود مدارک</div>
+        <div class="doc-section-sub" id="docSectionSub"></div>
+        <div id="docsBlockMain"></div>
+        <button class="modal-cta" style="background:var(--ink);" onclick="closeModal()">بعداً ادامه می‌دم</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= RESUME MODAL (تکمیل مدارک بعد از بازگشت) ================= -->
+<div class="modal-overlay" id="resumeOverlay">
+  <div class="modal-box">
+    <div class="modal-head"><h3>تکمیل مدارک</h3><button class="close-btn" onclick="closeResume()">✕</button></div>
+    <div class="modal-body">
+      <div class="step" id="resumeStep1">
+        <div class="form-field"><label>شماره موبایلی که باهاش خرید کردی</label><input type="text" id="r-mobile" placeholder="۰۹xxxxxxxxx" maxlength="11" inputmode="numeric"></div>
+        <div class="form-field"><label>کد پیگیری سفارش</label><input type="text" id="r-track" placeholder="مثلاً SNJ-123456"></div>
+        <button class="modal-cta" onclick="findOrder()">پیدا کردن سفارش</button>
+      </div>
+      <div class="step" id="resumeStep2" style="display:none;">
+        <div class="doc-section-title">مدارک سفارش تو</div>
+        <div class="doc-section-sub">هر کدوم که هنوز نفرستادی رو از این‌جا آپلود کن یا از واتساپ بفرست.</div>
+        <div id="docsBlockResume"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">پیام</div>
+
+<script>
+/* ============ campaign state ============ */
+let campaign = { base: 9800000, percent: 15, endTime: new Date().getTime() + (2*24*60*60*1000 + 14*60*60*1000) };
+let offers = []; // extra offers created by admin
+let newOfferType = 'tier';
+
+function toFa(n){ const fa=['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹']; return String(n).split('').map(c=>fa[c]||c).join(''); }
+function formatToman(n){ return toFa(Math.round(n).toLocaleString('en-US')); }
+function discountedPrice(){ return campaign.base * (1 - campaign.percent/100); }
+
+function renderCampaignOnStore(){
+  document.getElementById('discountTag').textContent = toFa(campaign.percent) + '٪ تخفیف محدود';
+  document.getElementById('priceOld').textContent = formatToman(campaign.base) + ' تومان';
+  document.getElementById('priceNew').textContent = formatToman(discountedPrice());
+}
+renderCampaignOnStore();
+
+function tickCountdown(){
+  const now = new Date().getTime();
+  let diff = campaign.endTime - now; if(diff < 0) diff = 0;
+  const d = Math.floor(diff/(1000*60*60*24));
+  const h = Math.floor((diff/(1000*60*60)) % 24);
+  const m = Math.floor((diff/(1000*60)) % 60);
+  const s = Math.floor((diff/1000) % 60);
+  document.getElementById('cd-d').textContent = toFa(d);
+  document.getElementById('cd-h').textContent = toFa(String(h).padStart(2,'0'));
+  document.getElementById('cd-m').textContent = toFa(String(m).padStart(2,'0'));
+  document.getElementById('cd-s').textContent = toFa(String(s).padStart(2,'0'));
+}
+tickCountdown(); setInterval(tickCountdown, 1000);
+
+function saveCampaign(){
+  campaign.base = parseFloat(document.getElementById('a-base').value) || campaign.base;
+  campaign.percent = parseFloat(document.getElementById('a-percent').value) || 0;
+  const endVal = document.getElementById('a-enddate').value;
+  if(endVal){ campaign.endTime = new Date(endVal).getTime(); }
+  renderCampaignOnStore();
+  document.getElementById('a-preview-text').textContent = 'قیمت نهایی: ' + formatToman(discountedPrice()) + ' تومان';
+  showToast('کمپین ذخیره شد و روی فروشگاه اعمال شد ✓');
+}
+document.getElementById('a-base').addEventListener('input', updatePreview);
+document.getElementById('a-percent').addEventListener('input', updatePreview);
+function updatePreview(){
+  const base = parseFloat(document.getElementById('a-base').value) || 0;
+  const percent = parseFloat(document.getElementById('a-percent').value) || 0;
+  document.getElementById('a-preview-text').textContent = 'قیمت نهایی: ' + formatToman(base*(1-percent/100)) + ' تومان';
+}
+
+/* ============ extra offers builder ============ */
+function toggleNewOfferForm(){
+  document.getElementById('newOfferForm').classList.toggle('open');
+  if(document.getElementById('tierRows').children.length === 0) addTierRow();
+}
+function selectOfferType(type){
+  newOfferType = type;
+  ['tier','bundle','custom'].forEach(t=>{
+    document.getElementById('type-'+t).classList.toggle('sel', t===type);
+    document.getElementById('fields-'+t).style.display = t===type ? 'block' : 'none';
+  });
+}
+function addTierRow(){
+  const wrap = document.createElement('div');
+  wrap.className = 'tier-row';
+  wrap.innerHTML = `
+    <input type="text" placeholder="مبلغ شارژ (مثلاً ۲۰,۰۰۰,۰۰۰)" class="tier-amount">
+    <input type="text" placeholder="پاداش (مثلاً ۱۰٪ تخفیف)" class="tier-reward">
+    <button class="tier-remove" onclick="this.parentElement.remove()">✕</button>
+  `;
+  document.getElementById('tierRows').appendChild(wrap);
+}
+function saveNewOffer(){
+  const title = document.getElementById('o-title').value.trim();
+  if(!title){ showToast('عنوان پیشنهاد رو وارد کن'); return; }
+  let data = {};
+  if(newOfferType === 'tier'){
+    const rows = document.querySelectorAll('#tierRows .tier-row');
+    data.tiers = Array.from(rows).map(r => ({
+      amount: r.querySelector('.tier-amount').value,
+      reward: r.querySelector('.tier-reward').value
+    })).filter(t => t.amount && t.reward);
+    if(data.tiers.length === 0){ showToast('حداقل یک پله وارد کن'); return; }
+  } else if(newOfferType === 'bundle'){
+    data.product = document.getElementById('o-bundle-product').value;
+    data.condition = document.getElementById('o-bundle-condition').value;
+    data.benefit = document.getElementById('o-bundle-benefit').value;
+  } else {
+    data.text = document.getElementById('o-custom-text').value;
+  }
+  offers.push({ id:'o'+Date.now(), title, type:newOfferType, status:'on', data });
+  document.getElementById('newOfferForm').classList.remove('open');
+  document.getElementById('o-title').value = '';
+  document.getElementById('tierRows').innerHTML = '';
+  renderAdminOffers();
+  renderStoreOffers();
+  showToast('پیشنهاد اضافه شد و روی فروشگاه نمایش داده می‌شه ✓');
+}
+function toggleOfferStatus(id){
+  const o = offers.find(x=>x.id===id);
+  o.status = o.status === 'on' ? 'off' : 'on';
+  renderAdminOffers(); renderStoreOffers();
+}
+function deleteOffer(id){
+  offers = offers.filter(x=>x.id!==id);
+  renderAdminOffers(); renderStoreOffers();
+}
+function renderAdminOffers(){
+  const wrap = document.getElementById('offersAdminList');
+  if(offers.length === 0){ wrap.innerHTML = '<div style="font-size:12px; color:var(--ink-faint);">هنوز پیشنهادی اضافه نشده.</div>'; return; }
+  wrap.innerHTML = offers.map(o => `
+    <div class="offer-list-item">
+      <div class="offer-list-top">
+        <strong>${o.title}</strong>
+        <div class="offer-actions">
+          <span class="status-pill ${o.status==='on'?'on':'off'}">${o.status==='on'?'فعال':'غیرفعال'}</span>
+          <button onclick="toggleOfferStatus('${o.id}')">${o.status==='on'?'غیرفعال کن':'فعال کن'}</button>
+          <button onclick="deleteOffer('${o.id}')">حذف</button>
+        </div>
+      </div>
+      <div style="font-size:11.5px; color:var(--ink-soft);">${offerTypeLabel(o.type)}</div>
+    </div>
+  `).join('');
+}
+function offerTypeLabel(t){ return {tier:'شارژ پلکانی', bundle:'محصول مکمل', custom:'کمپین سفارشی'}[t] || t; }
+
+function renderStoreOffers(){
+  const wrap = document.getElementById('offersWrap');
+  const active = offers.filter(o=>o.status==='on');
+  if(active.length === 0){ wrap.innerHTML=''; return; }
+  wrap.innerHTML = '<div class="offers-title">پیشنهادهای ویژه</div>' + active.map(o => {
+    let body = '';
+    if(o.type === 'tier'){
+      body = o.data.tiers.map(t => `<div class="offer-tier-row"><span>شارژ ${t.amount} تومان</span><span>${t.reward}</span></div>`).join('');
+    } else if(o.type === 'bundle'){
+      body = `<div class="offer-body">${o.data.product} — ${o.data.condition}: <b>${o.data.benefit}</b></div>`;
+    } else {
+      body = `<div class="offer-body">${o.data.text}</div>`;
+    }
+    return `<div class="offer-card">
+      <div class="offer-top"><span class="offer-type-badge ${o.type}">${offerTypeLabel(o.type)}</span></div>
+      <strong>${o.title}</strong>
+      ${body}
+    </div>`;
+  }).join('');
+}
+selectOfferType('tier');
+renderAdminOffers();
+renderStoreOffers();
+
+/* ============ view switcher ============ */
+function showView(name, btn){
+  document.querySelectorAll('.switcher button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('customer-view').classList.toggle('active', name==='customer');
+  document.getElementById('admin-view').classList.toggle('active', name==='admin');
+}
+function toggleDocsPreview(){ document.getElementById('docsPreview').classList.toggle('open'); }
+
+/* ============ documents data ============ */
+const docsFull = [
+  {id:'nid', name:'کارت ملی (پشت و رو)'},{id:'license', name:'جواز کسب / مجوز فعالیت'},
+  {id:'deed', name:'سند مالکیت یا اجاره‌نامه'},{id:'sheba', name:'شماره شبا / صفحه اول دسته‌چک'},
+  {id:'eco', name:'کد اقتصادی (در صورت وجود)'},{id:'shop', name:'عکس نمای بیرونی مغازه'},
+];
+const docsMinimal = [ {id:'nid', name:'کارت ملی (پشت و رو)'}, {id:'license', name:'جواز کسب / مجوز فعالیت'} ];
+let currentDocs = docsFull;
+let docState = {};
+let selectedPlan = 'full';
+function initDocState(list){ docState = {}; list.forEach(d=> docState[d.id]='pending'); }
+
+const waLink = 'https://wa.me/989120000000?text=%D8%B3%D9%84%D8%A7%D9%85%D8%8C%20%D9%85%D8%AF%D8%A7%D8%B1%DA%A9%20%D8%AB%D8%A8%D8%AA%20%D9%BE%D9%88%D8%B2%20%D8%B3%D9%86%D8%AC%D8%A7%D8%A8%20%D8%B1%D9%88%20%D8%A7%D8%B1%D8%B3%D8%A7%D9%84%20%D9%85%DB%8C%E2%80%8C%DA%A9%D9%86%D9%85';
+
+/* ============ purchase modal flow (no OTP) ============ */
+function openPurchase(plan){
+  selectedPlan = plan;
+  currentDocs = plan === 'minimal' ? docsMinimal : docsFull;
+  initDocState(currentDocs);
+  document.getElementById('modalTitle').textContent = plan === 'minimal' ? 'خرید بدون دستگاه پوز' : 'خرید با دستگاه پوز';
+  document.getElementById('payAmount').textContent = formatToman(discountedPrice());
+  goStep(1);
+  document.getElementById('modalOverlay').classList.add('show');
+}
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('show'); }
+
+function goStep(n){
+  [1,2,3].forEach(i=>{
+    document.getElementById('step'+i).style.display = i===n ? 'block' : 'none';
+    document.getElementById('dot'+i).classList.toggle('on', i===n);
+  });
+  if(n===2){
+    if(!validateForm()){ goStep(1); return; }
+    setTimeout(()=>{ goStep(3); }, 1500);
+  }
+  if(n===3){
+    const code = 'SNJ-' + Math.floor(100000+Math.random()*899999);
+    document.getElementById('trackCode').textContent = code;
+    document.getElementById('docSectionSub').textContent = selectedPlan === 'minimal' ? 'برای این خرید فقط ۲ مدرک لازمه.' : 'برای این خرید ۶ مدرک لازمه.';
+    renderDocsBlock('docsBlockMain', currentDocs);
+  }
+}
+function validateForm(){
+  let ok = true;
+  const mobile = document.getElementById('f-mobile');
+  ['f-name','f-lname','f-job','f-province','f-city','f-addr'].forEach(id=>{
+    const el = document.getElementById(id);
+    el.style.borderColor = el.value.trim() ? '' : 'var(--red)';
+    if(!el.value.trim()) ok = false;
+  });
+  const mobField = mobile.closest('.form-field');
+  if(!/^09\d{9}$/.test(mobile.value)){ mobField.classList.add('invalid'); ok = false; }
+  else{ mobField.classList.remove('invalid'); }
+  if(!ok) showToast('لطفاً فیلدهای مشخص‌شده رو تکمیل کن');
+  return ok;
+}
+
+/* ============ resume flow ============ */
+function openResume(){
+  document.getElementById('resumeStep1').style.display = 'block';
+  document.getElementById('resumeStep2').style.display = 'none';
+  document.getElementById('r-mobile').value = '';
+  document.getElementById('r-track').value = '';
+  document.getElementById('resumeOverlay').classList.add('show');
+}
+function closeResume(){ document.getElementById('resumeOverlay').classList.remove('show'); }
+function findOrder(){
+  const mobile = document.getElementById('r-mobile').value;
+  const track = document.getElementById('r-track').value;
+  if(!/^09\d{9}$/.test(mobile) || !track.trim()){ showToast('شماره موبایل یا کد پیگیری درست نیست'); return; }
+  // demo: assume "full" plan docs for resumed order
+  currentDocs = docsFull; initDocState(docsFull);
+  document.getElementById('resumeStep1').style.display = 'none';
+  document.getElementById('resumeStep2').style.display = 'block';
+  renderDocsBlock('docsBlockResume', currentDocs);
+  showToast('سفارش پیدا شد ✓');
+}
+
+/* ============ shared doc rendering (wa + upload) ============ */
+function renderDocsBlock(containerId, docsList){
+  const container = document.getElementById(containerId);
+  container.innerHTML = `
+    <div class="readiness">
+      <div class="ring-wrap">
+        <svg width="60" height="60" viewBox="0 0 60 60">
+          <circle class="ring-bg" cx="30" cy="30" r="25"></circle>
+          <circle class="ring-fg" id="ringFg-${containerId}" cx="30" cy="30" r="25" stroke-dasharray="157" stroke-dashoffset="157"></circle>
+        </svg>
+        <div class="ring-txt" id="ringTxt-${containerId}">۰٪</div>
+      </div>
+      <div class="readiness-info"><strong id="readyCount-${containerId}">۰ از ۰ مدرک</strong><span>هر مدرک رو جدا آپلود کن</span></div>
+    </div>
+    <a class="wa-btn" href="${waLink}" target="_blank">💬 ارسال مدارک از طریق واتساپ</a>
+    <div id="docList-${containerId}"></div>
+  `;
+  renderDocItems(containerId, docsList);
+}
+function renderDocItems(containerId, docsList){
+  const list = document.getElementById('docList-'+containerId);
+  list.innerHTML = '';
+  docsList.forEach(doc=>{
+    const st = docState[doc.id] || 'pending';
+    const row = document.createElement('div');
+    row.className = 'doc-item';
+    row.innerHTML = `
+      <div class="doc-item-top">
+        <div class="doc-item-name"><div class="doc-check ${st==='uploaded'?'done':''}">${st==='uploaded'?'✓':''}</div>${doc.name}</div>
+        <div class="doc-status ${st}">${st==='pending'?'در انتظار':st==='uploaded'?'آپلود شد':'خطا'}</div>
+      </div>
+      <div class="doc-actions">
+        <label>انتخاب فایل<input type="file" style="display:none" accept=".jpg,.jpeg,.png,.pdf" onchange="handleUpload('${doc.id}', this, '${containerId}')"></label>
+      </div>
+      <div class="doc-err-msg" id="err-${containerId}-${doc.id}" style="display:none;"></div>
+    `;
+    list.appendChild(row);
+  });
+  updateRing(containerId, docsList);
+}
+function handleUpload(id, input, containerId){
+  const file = input.files[0]; if(!file) return;
+  const errId = 'err-'+containerId+'-'+id;
+  const okTypes = ['image/jpeg','image/png','application/pdf'];
+  if(!okTypes.includes(file.type)){
+    docState[id] = 'error'; renderDocItems(containerId, currentDocs);
+    document.getElementById(errId).style.display='block';
+    document.getElementById(errId).textContent = 'فرمت فایل پشتیبانی نمی‌شود';
+    return;
+  }
+  if(file.size > 5*1024*1024){
+    docState[id] = 'error'; renderDocItems(containerId, currentDocs);
+    document.getElementById(errId).style.display='block';
+    document.getElementById(errId).textContent = 'حجم فایل بیش از ۵ مگابایت است';
+    return;
+  }
+  docState[id] = 'uploaded';
+  renderDocItems(containerId, currentDocs);
+  showToast('مدرک آپلود شد ✓');
+}
+function updateRing(containerId, docsList){
+  const total = docsList.length;
+  const done = docsList.filter(d=>docState[d.id]==='uploaded').length;
+  const pct = total ? Math.round((done/total)*100) : 0;
+  const circumference = 157;
+  const fg = document.getElementById('ringFg-'+containerId);
+  const txt = document.getElementById('ringTxt-'+containerId);
+  const cnt = document.getElementById('readyCount-'+containerId);
+  if(fg) fg.style.strokeDashoffset = circumference - (circumference*pct/100);
+  if(txt) txt.textContent = toFa(pct) + '٪';
+  if(cnt) cnt.textContent = toFa(done) + ' از ' + toFa(total) + ' مدرک';
+}
+
+/* ============ admin: orders + bar chart (static demo data) ============ */
+const orders = [
+  {name:'علی رضایی', mobile:'0912***4419', city:'قزوین', type:'با پوز', docs:'done', order:'paid', date:'۱۴۰۵/۰۵/۰۴'},
+  {name:'سارا محمدی', mobile:'0935***2201', city:'تهران', type:'بدون پوز', docs:'waiting', order:'paid', date:'۱۴۰۵/۰۵/۰۴'},
+  {name:'حسین کریمی', mobile:'0919***7743', city:'قزوین', type:'با پوز', docs:'needfix', order:'paid', date:'۱۴۰۵/۰۵/۰۳'},
+  {name:'مریم احمدی', mobile:'0901***5560', city:'کرج', type:'با پوز', docs:'waiting', order:'paid', date:'۱۴۰۵/۰۵/۰۲'},
+  {name:'رضا نوری', mobile:'0933***9981', city:'قزوین', type:'بدون پوز', docs:'done', order:'paid', date:'۱۴۰۵/۰۵/۰۱'},
+];
+function pillLabel(k){ return {done:'تکمیل شده', waiting:'در انتظار', needfix:'نیاز به اصلاح', paid:'پرداخت‌شده'}[k] || k; }
+function pillClass(k){ return {done:'done', waiting:'waiting', needfix:'needfix', paid:'paid'}[k] || ''; }
+function renderOrders(){
+  document.getElementById('ordersBody').innerHTML = orders.map(o => `
+    <tr>
+      <td>${o.name}</td><td style="direction:ltr; text-align:left;">${o.mobile}</td><td>${o.city}</td><td>${o.type}</td>
+      <td><span class="pill ${pillClass(o.docs)}">${pillLabel(o.docs)}</span></td>
+      <td><span class="pill ${pillClass(o.order)}">${pillLabel(o.order)}</span></td>
+      <td>${o.date}</td>
+    </tr>`).join('');
+}
+renderOrders();
+
+const barData = [{l:'شنبه',v:3},{l:'یک',v:5},{l:'دو',v:2},{l:'سه',v:6},{l:'چهار',v:4},{l:'پنج',v:7},{l:'جمعه',v:3}];
+function renderBars(){
+  const max = Math.max(...barData.map(b=>b.v));
+  document.getElementById('barChart').innerHTML = barData.map(b => `<div class="bar-col"><div class="bar-fill" style="height:${(b.v/max*100)}%"></div><span>${b.l}</span></div>`).join('');
+}
+renderBars();
+
+/* ============ utils ============ */
+function showToast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(()=> el.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>

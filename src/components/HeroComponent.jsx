@@ -1,4 +1,13 @@
+import { useRef, useState } from 'react';
+
 export default function HeroComponent() {
+    const videoRef = useRef(null);
+    const [hasStarted, setHasStarted] = useState(false);
+
+    const playVideo = () => {
+        videoRef.current?.play().catch(() => setHasStarted(false));
+    };
+
     return (
         <div className="container max-w-[1150px] mx-auto">
             <div className="relative w-full bg-white overflow-hidden">
@@ -9,15 +18,21 @@ export default function HeroComponent() {
                         <div className="relative w-full lg:w-1/2">
                             <div className="relative w-full aspect-[4/3] rounded-[30px] overflow-hidden bg-[#000000] shadow-2xl">
                                 <div className="absolute inset-0">
-                                    <img
-                                        src="/images/ability.png"
-                                        alt="Video thumbnail"
-                                        className="w-full h-full object-cover"
+                                    <video
+                                        ref={videoRef}
+                                        src="/videos/landing-intro.mp4"
+                                        poster="/videos/landing-intro-poster.jpg"
+                                        aria-label="ویدئوی معرفی سنجاب"
+                                        className="w-full h-full object-contain"
+                                        controls={hasStarted}
+                                        playsInline
+                                        preload="none"
+                                        onPlay={() => setHasStarted(true)}
                                     />
                                 </div>
 
-                                <div className="absolute inset-0 flex flex-col items-center justify-center z-[1]">
-                                    <button className="relative mb-5 w-20 h-20 lg:w-24 lg:h-24 rounded-full bg-[rgba(255,165,0,0.7)] backdrop-blur-sm flex items-center justify-center hover:bg-[rgba(255,165,0,0.8)] transition-all group shadow-lg">
+                                {!hasStarted && <div className="absolute inset-0 flex flex-col items-center justify-center z-[1]">
+                                    <button onClick={playVideo} aria-label="پخش ویدئوی معرفی سنجاب" className="relative mb-5 w-20 h-20 lg:w-24 lg:h-24 rounded-full bg-[rgba(255,165,0,0.7)] backdrop-blur-sm flex items-center justify-center hover:bg-[rgba(255,165,0,0.8)] transition-all group shadow-lg">
                                         <svg
                                             className="w-10 h-10 lg:w-12 lg:h-12 text-white ml-1"
                                             fill="currentColor"
@@ -30,7 +45,7 @@ export default function HeroComponent() {
                                     <span className="text-white text-sm lg:text-base font-medium tracking-wide">
                                         مشاهده ویدئو
                                     </span>
-                                </div>
+                                </div>}
                             </div>
 
                             <div className="absolute -bottom-10 -right-10 lg:-bottom-16 lg:-right-16 w-40 h-40 lg:w-56 lg:h-56 z-[1]">
@@ -79,7 +94,7 @@ export default function HeroComponent() {
 
                             <div className="space-y-3 text-right text-[18px] sm:text-[20px] text-[#313033] leading-[1.7] mb-7 max-w-xl" style={{ direction: 'rtl' }}>
                                 <p className="font-medium">
-                                    با سنجاب، هر مشتری چندبار از شما خرید می‌کند
+                                    با سنجاب، هر مشتری چند بار از شما خرید می‌کند
                                 </p>
                             </div>
 

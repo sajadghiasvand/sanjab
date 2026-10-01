@@ -1,3 +1,9 @@
+const partners = [
+    { src: '/images/partners/fereshtegan.jpeg', name: 'گالری فرشتگان' },
+    { src: '/images/partners/zaraban.jpeg', name: 'ضربان' },
+    { src: '/images/partners/behsin.png', name: 'کلینیک پوست و مو بهسین' },
+];
+
 export default function CollaborateComponent() {
     return (
         <section className="relative w-full bg-white py-12 lg:py-16">
@@ -7,28 +13,24 @@ export default function CollaborateComponent() {
                     {/* Title on Top (Mobile) */}
                     <div className="text-center">
                         <span className="text-[22px] text-[#313033] font-medium">
-                            در کنار بهترین ها با شما هستیم
+                            در کنار بهترین‌ها با شما هستیم
                         </span>
                     </div>
 
                     {/* Scrollable Items (Mobile) */}
-                    <div className="flex flex-nowrap items-center justify-start gap-4 overflow-x-auto pb-4 scrollbar-hide px-0">
-                        <img src="/images/Logo.svg" className="w-[100px] flex-shrink-0" alt="Logo" />
-                        <img src="/images/Logo.svg" className="w-[100px] flex-shrink-0" alt="Logo" />
-                        <img src="/images/Logo.svg" className="w-[100px] flex-shrink-0" alt="Logo" />
-                        <img src="/images/Logo.svg" className="w-[100px] flex-shrink-0" alt="Logo" />
-                        <img src="/images/Logo.svg" className="w-[100px] flex-shrink-0" alt="Logo" />
+                    <div className="flex flex-nowrap items-center justify-center gap-4 overflow-x-auto pb-4 scrollbar-hide px-0">
+                        {partners.map(partner => (
+                            <img key={partner.src} src={partner.src} className="w-[100px] h-[100px] object-contain flex-shrink-0" alt={partner.name} />
+                        ))}
                     </div>
                 </div>
 
                 {/* Desktop Layout: Horizontal with title on right */}
                 <div className="hidden lg:flex flex-wrap items-center justify-center gap-8 lg:gap-12">
                     <div className="flex items-center gap-4">
-                        <img src="/images/Logo.svg" className="w-[100px]" alt="Logo" />
-                        <img src="/images/Logo.svg" className="w-[100px]" alt="Logo" />
-                        <img src="/images/Logo.svg" className="w-[100px]" alt="Logo" />
-                        <img src="/images/Logo.svg" className="w-[100px]" alt="Logo" />
-                        <img src="/images/Logo.svg" className="w-[100px]" alt="Logo" />
+                        {partners.map(partner => (
+                            <img key={partner.src} src={partner.src} className="w-[100px] h-[100px] object-contain flex-shrink-0" alt={partner.name} />
+                        ))}
                     </div>
 
                     {/* Horizontal Line */}
@@ -37,7 +39,7 @@ export default function CollaborateComponent() {
                     {/* Final Text */}
                     <div className="flex items-center">
                         <span className="text-[22px] text-[#313033] font-medium">
-                            در کنار بهترین ها با شما هستیم
+                            در کنار بهترین‌ها با شما هستیم
                         </span>
                     </div>
                 </div>

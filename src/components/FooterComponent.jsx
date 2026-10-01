@@ -65,7 +65,7 @@ export default function FooterComponent() {
                                 <div className="flex items-center justify-end gap-4">
                                     <div className="text-right">
                                         <p className="text-xs text-[#31303380] mb-1">مشاوره رایگان</p>
-                                        <a href="tel:02833642865" className="text-base font-medium text-[#313033]" dir="ltr">02833642865</a>
+                                        <a href="tel:09303828200" className="text-base font-medium text-[#313033]" dir="ltr">09303828200</a>
                                     </div>
                                     <div className="w-10 h-10 rounded-lg bg-light-orange-bg flex items-center justify-center flex-shrink-0">
                                         <svg
@@ -87,7 +87,7 @@ export default function FooterComponent() {
                                 <div className="flex items-center justify-end gap-4">
                                     <div className="text-right">
                                         <p className="text-xs text-[#31303380] mb-1">پست الکترونیک</p>
-                                        <p className="text-base font-medium text-[#313033]">info@Sanjab.ir</p>
+                                        <p className="text-base font-medium text-[#313033]">info@sanjab.app</p>
                                     </div>
                                     <div className="w-10 h-10 rounded-lg bg-light-orange-bg flex items-center justify-center flex-shrink-0">
                                         <svg
@@ -121,7 +121,23 @@ export default function FooterComponent() {
                                     سنجاب یک سیستم وفادارسازی مشتری متصل به پوز است که به کسب‌وکارها کمک می‌کند مشتریان خود را حفظ کنند و فروش بیشتری داشته باشند.
                                 </p>
 
-                                <div className="flex justify-center sm:justify-end mb-6">
+                                <div className="flex flex-wrap items-center justify-center sm:justify-end gap-6 mb-6">
+                                    <a
+                                        href="https://trustseal.enamad.ir/?id=540947&code=oLlZCD7Eduaz1uc40p1MvfPAlmAi9uCn"
+                                        target="_blank"
+                                        rel="noopener"
+                                        aria-label="مشاهده نماد اعتماد الکترونیکی سنجاب"
+                                        className="block shrink-0 rounded-xl bg-white p-2"
+                                    >
+                                        <img
+                                            src="https://trustseal.enamad.ir/logo.aspx?id=540947&code=oLlZCD7Eduaz1uc40p1MvfPAlmAi9uCn"
+                                            alt="نماد اعتماد الکترونیکی سنجاب"
+                                            referrerPolicy="origin"
+                                            width="125"
+                                            height="136"
+                                            className="w-[125px] h-[136px] object-contain"
+                                        />
+                                    </a>
                                     <a
                                         href="#contact"
                                         className="px-6 py-3 bg-[#B68E5D] text-white font-medium rounded-xl hover:bg-[#A68B6F] transition-colors text-sm lg:text-base whitespace-nowrap"

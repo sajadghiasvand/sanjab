@@ -1,19 +1,19 @@
 export default function LearnComponent() {
     const learnCards = [
         {
-            image: "/images/Rectangle 40442.png",
-            title: "چرا مشتری‌ها برنمی‌گردند و راه حل آن چیست؟",
+            image: "/images/cards/article-1.jpg",
+            title: "چرا مشتری‌ها برنمی‌گردند و راه‌حل آن چیست؟",
             description: "دلایل اصلی ترک مشتری بعد از اولین خرید و اینکه چطور با وفادارسازی هوشمند می‌توانید آن‌ها را برگردانید.",
             link: "مشاهده بیشتر"
         },
         {
-            image: "/images/Rectangle 40464.png",
+            image: "/images/cards/article-2.jpg",
             title: "چطور بدون تبلیغات، مشتری جدید جذب کنیم؟",
             description: "با اشتراک‌گذاری هوشمند مشتریان در شبکه سنجاب، بدون هزینه تبلیغات به مخاطب هدفمند دسترسی پیدا کنید.",
             link: "مشاهده بیشتر"
         },
         {
-            image: "/images/Rectangle 40466.png",
+            image: "/images/cards/article-3.jpg",
             title: "نقش وفادارسازی در افزایش فروش کسب‌وکارها",
             description: "چگونه کش‌بک و طرح‌های تشویقی باعث تکرار خرید و رشد پایدار فروش می‌شوند.",
             link: "مشاهده بیشتر"
@@ -46,6 +46,7 @@ export default function LearnComponent() {
                                 <img
                                     src={card.image}
                                     alt={card.title}
+                                    loading="lazy"
                                     className="w-full h-full object-cover rounded-[20px]"
                                 />
                             </div>

@@ -164,7 +164,7 @@ export default function FaqComponent() {
                         <div className="mb-8 lg:mb-10 text-center sm:text-right">
                             <div className="flex items-center justify-center sm:justify-end gap-3 mb-4">
                                 <span className="text-[16px] text-[#313033] font-light normal whitespace-nowrap">
-                                    سوالات پرتکرار
+                                    سؤالات پرتکرار
                                 </span>
                                 <img src="/images/Line 65.png" alt="Line" />
                             </div>
