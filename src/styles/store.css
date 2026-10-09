@@ -1,28 +1,8 @@
-.store-root {
-  --orange: #DC4D01;
-  --orange-dark: #B23F01;
-  --orange-light: #FF8A3D;
-  --salmon: #F9BB9B;
-  --salmon-light: #FDEAE0;
-  --ink: #241C18;
-  --ink-soft: #6B5F58;
-  --ink-faint: #A79A92;
-  --paper: #FBF8F6;
-  --card: #FFFFFF;
-  --line: #EFE3DB;
-  --green: #2E8B57;
-  --green-light: #E9F5EE;
-  --red: #B15353;
-  --red-light: #F7EAEA;
-  --blue: #3B6FA0;
-  --blue-light: #EAF1F8;
-  --purple: #7B5CA8;
-  --purple-light: #F1ECF7;
-  --shadow: 0 2px 12px rgba(36, 28, 24, 0.06), 0 1px 2px rgba(36, 28, 24, 0.04);
-  --shadow-lg: 0 16px 40px rgba(220, 77, 1, 0.14), 0 3px 10px rgba(36, 28, 24, 0.07);
+@import "../shared/storefront/pos-tokens.css";
 
+.store-root {
   box-sizing: border-box;
-  font-family: 'Vazirmatn', sans-serif;
+  font-family: "Vazirmatn", sans-serif;
   background: var(--paper);
   color: var(--ink);
   line-height: 1.6;
@@ -76,14 +56,14 @@
   width: 120px;
   height: 150px;
   margin: 0 auto 20px;
-  background: linear-gradient(160deg, #2A2320, var(--ink));
+  background: linear-gradient(160deg, #2a2320, var(--ink));
   border-radius: 18px;
   position: relative;
   box-shadow: 0 16px 34px rgba(36, 28, 24, 0.22);
 }
 
 .store-root .device-mini::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 14px;
   left: 14px;
@@ -94,7 +74,7 @@
 }
 
 .store-root .device-mini::after {
-  content: 'سنجاب';
+  content: "سنجاب";
   position: absolute;
   top: 28px;
   left: 0;
@@ -282,7 +262,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  transition: border-color 0.2s, transform 0.15s;
+  transition:
+    border-color 0.2s,
+    transform 0.15s;
 }
 
 .store-root .plan-row:active {
@@ -379,7 +361,7 @@
 }
 
 .store-root .docs-preview-cols li::before {
-  content: '• ';
+  content: "• ";
   color: var(--orange);
 }
 
@@ -427,7 +409,7 @@
 }
 
 .store-root .docs-preview-panel li::before {
-  content: '• ';
+  content: "• ";
   color: var(--orange);
 }
 
@@ -846,7 +828,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: #25D366;
+  background: #25d366;
   color: #fff;
   border-radius: 13px;
   padding: 12px;

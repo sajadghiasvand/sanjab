@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
 const navLinks = [
+    { label: 'فروشگاه', href: '/shop' },
+    { label: 'وبلاگ', href: '/blog' },
     { label: 'خرید پوز', href: '/store' },
     { label: 'آموزش', href: '#learn' },
     { label: 'سؤالات متداول', href: '#faq' },
