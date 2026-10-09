@@ -1042,3 +1042,506 @@
     transition: none;
   }
 }
+
+/* Shared business site and domain server settings. */
+.sm-site-workspace,
+.sm-server-page {
+  --sm-accent: #6855c8;
+  --sm-accent-strong: #504098;
+  --sm-accent-soft: #f4f1ff;
+  --sm-accent-border: #ddd6f7;
+}
+.sm-site-page .sm-heading,
+.sm-server-page .sm-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.sm-site-page .sm-form,
+.sm-server-page .sm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.sm-site-page .sm-settings-card,
+.sm-server-page .sm-settings-card {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  padding: 22px;
+  margin: 0;
+  border: 1px solid #e6e8f0;
+  border-radius: 16px;
+  background: #fff;
+  min-width: 0;
+}
+.sm-settings-card legend {
+  padding: 0 10px;
+  color: #373c52;
+  font-size: 15px;
+  font-weight: 700;
+}
+.sm-settings-card .sm-settings-description {
+  grid-column: 1 / -1;
+  color: #7c8495;
+  font-size: 12px;
+  margin: 0;
+}
+.sm-site-page label,
+.sm-server-page label {
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 0;
+}
+.sm-site-page label small,
+.sm-server-page label small {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.sm-site-page input,
+.sm-server-page input {
+  min-height: 46px;
+  font-weight: 400;
+}
+.sm-site-page input[dir="ltr"],
+.sm-server-page input[dir="ltr"] {
+  text-align: left;
+}
+.sm-site-page textarea.sm-code-input {
+  background: #f8f9fc;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.8;
+  text-align: left;
+  font-weight: 400;
+}
+.sm-site-page .sm-tracking-fields {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.sm-settings-advanced {
+  border: 1px solid #e6e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.sm-settings-advanced summary {
+  cursor: pointer;
+  padding: 18px 22px;
+  color: #42495c;
+  font-size: 14px;
+  font-weight: 600;
+  background: #fafbfe;
+}
+.sm-settings-advanced summary span {
+  margin-right: 12px;
+  font-size: 11px;
+  color: #8790a2;
+  font-weight: 400;
+}
+.sm-settings-advanced-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  padding: 22px;
+}
+.sm-settings-footer {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 18px 22px;
+  border-radius: 14px;
+  background: #f7f8fc;
+  border: 1px solid #e9ecf3;
+}
+.sm-settings-footer p {
+  flex: 1;
+  color: #7b8495;
+  font-size: 12px;
+  margin: 0;
+}
+.sm-settings-footer a {
+  color: var(--sm-accent-strong);
+  font-size: 12px;
+  text-decoration: none;
+  padding: 8px 10px;
+}
+.sm-settings-footer button {
+  margin-left: auto;
+}
+.sm-server-page {
+  margin: 0;
+  padding: 28px;
+  background: #fff;
+  border: 1px solid #e6e8f0;
+  border-radius: 20px;
+}
+.sm-server-status {
+  padding: 18px 22px;
+  border: 1px solid #e4e7f0;
+  border-radius: 14px;
+  background: #f7f8fc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.sm-server-status strong {
+  font-size: 13px;
+  color: #40475c;
+}
+.sm-server-status p {
+  margin: 0;
+  font-size: 12px;
+  color: #707c93;
+}
+.sm-admin-site-shell {
+  padding: 0 24px 24px;
+}
+.sm-admin-site-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 16px 0 22px;
+}
+.sm-admin-site-navigation a {
+  padding: 9px 14px;
+  border: 1px solid #e2e5ef;
+  border-radius: 10px;
+  color: #626b81;
+  font-size: 13px;
+  background: #fff;
+  text-decoration: none;
+}
+.sm-admin-site-navigation h2 {
+  font-size: 16px;
+  color: #343a50;
+  font-weight: 700;
+  margin: 0;
+}
+.sm-site-page .sm-table-wrap {
+  border-radius: 14px;
+}
+.sm-site-page .sm-table td {
+  overflow-wrap: anywhere;
+}
+.sm-site-page .sm-table .sm-actions button {
+  padding: 7px 11px;
+  min-height: 34px;
+  font-size: 12px;
+}
+@media (max-width: 700px) {
+  .sm-site-page .sm-settings-card,
+  .sm-server-page .sm-settings-card,
+  .sm-site-page .sm-tracking-fields,
+  .sm-settings-advanced-body {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 16px;
+  }
+  .sm-admin-site-shell {
+    padding: 0 12px 16px;
+  }
+  .sm-server-page {
+    padding: 18px 14px;
+  }
+  .sm-settings-footer {
+    padding: 16px;
+  }
+  .sm-settings-footer button {
+    width: 100%;
+  }
+}
+
+.sm-domain-page {
+  --sm-accent: #6855c8;
+  --sm-accent-strong: #504098;
+  --sm-accent-soft: #f4f1ff;
+  --sm-accent-border: #ddd6f7;
+}
+.sm-domain-page .sm-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.sm-domain-intro {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.sm-domain-intro span {
+  background: #f7f8fc;
+  border: 1px solid #e8eaf2;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: #626b80;
+}
+.sm-domain-create {
+  display: grid;
+  grid-template-columns: minmax(200px, 1.4fr) minmax(180px, 1fr) auto;
+  gap: 20px;
+  align-items: end;
+  border: 1px solid #e5e3f1;
+  border-radius: 16px;
+  padding: 22px;
+  background: #fcfbff;
+}
+.sm-domain-create-heading {
+  grid-column: 1 / -1;
+}
+.sm-domain-create-heading h2 {
+  font-size: 16px;
+  margin: 0;
+}
+.sm-domain-create-heading p {
+  font-size: 12px;
+  color: #82899a;
+  margin: 4px 0 0;
+}
+.sm-domain-services > span {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.sm-domain-services > div,
+.sm-domain-enabled-services > div {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  min-height: 46px;
+  flex-wrap: wrap;
+}
+.sm-domain-page .sm-check {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  cursor: pointer;
+}
+.sm-domain-page input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--sm-accent);
+}
+.sm-domain-host-field {
+  font-size: 13px;
+  font-weight: 600;
+}
+.sm-domain-host-field input {
+  text-align: left;
+  min-height: 46px;
+  font-weight: 400;
+}
+.sm-domain-card {
+  margin-top: 24px;
+  border: 1px solid #e4e7ef;
+  border-radius: 18px;
+  overflow: hidden;
+  background: white;
+}
+.sm-domain-card-heading {
+  padding: 22px 24px;
+  background: #fafbfe;
+  border-bottom: 1px solid #edf0f5;
+}
+.sm-domain-card-heading h2 {
+  font-size: 20px;
+  text-align: right;
+  overflow-wrap: anywhere;
+  margin: 0 0 10px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+.sm-domain-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.sm-domain-badges span {
+  padding: 4px 10px;
+  border-radius: 7px;
+  font-size: 11px;
+  color: #7b6b48;
+  background: #faf2df;
+}
+.sm-domain-badges span.is-active,
+.sm-domain-badges span.is-verified {
+  color: #297457;
+  background: #e9f6ee;
+}
+.sm-domain-dns summary,
+.sm-domain-options summary {
+  padding: 16px 24px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #555f75;
+}
+.sm-domain-dns summary span {
+  margin-right: 12px;
+  font-size: 11px;
+  color: #8c95a6;
+}
+.sm-domain-dns dl {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  margin: 0 24px;
+  border: 1px solid #e7eaf2;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.sm-domain-dns dt,
+.sm-domain-dns dd {
+  margin: 0;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e7eaf2;
+  font-size: 12px;
+}
+.sm-domain-dns dt {
+  background: #f7f8fc;
+  font-weight: 600;
+}
+.sm-domain-dns dd {
+  text-align: left;
+  overflow-wrap: anywhere;
+  line-height: 1.9;
+  color: #515c71;
+}
+.sm-domain-dns dt:last-of-type,
+.sm-domain-dns dd:last-of-type {
+  border-bottom: 0;
+}
+.sm-domain-dns code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 12px;
+}
+.sm-domain-page .sm-domain-dns-note {
+  margin: 12px 24px 20px;
+  font-size: 12px;
+  color: #848d9f;
+}
+.sm-domain-enabled-services {
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  border-top: 1px solid #edf0f5;
+}
+.sm-domain-enabled-services strong {
+  font-size: 12px;
+  color: #657088;
+}
+.sm-domain-primary-actions {
+  padding: 16px 24px;
+  border-top: 1px solid #edf0f5;
+  justify-content: flex-start;
+}
+.sm-domain-primary-actions button {
+  font-size: 13px;
+}
+.sm-domain-options {
+  border-top: 1px solid #edf0f5;
+  background: #fafbfe;
+}
+.sm-domain-options-body {
+  padding: 0 24px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.sm-domain-options-body > button {
+  background: #fff;
+  color: #5b6478;
+  border-color: #dfe3ee;
+  font-size: 12px;
+}
+.sm-domain-delete-actions {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  padding-top: 18px;
+  border-top: 1px solid #e6e9f1;
+}
+.sm-domain-delete-actions button {
+  background: #fff0ef;
+  color: #ae2929;
+  border-color: #edbbbb;
+  font-size: 12px;
+}
+.sm-domain-page .sm-domain-job {
+  margin: 0 24px 16px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #f1f2fb;
+  color: #626989;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.sm-domain-page .sm-domain-job-failed {
+  background: #fff0ef;
+  color: #ae2929;
+}
+.sm-domain-page .sm-domain-job-succeeded {
+  background: #e9f6ee;
+  color: #297457;
+}
+.sm-domain-empty {
+  margin: 24px 0 0;
+  text-align: center;
+  border: 1px dashed #dfe3ee;
+  border-radius: 16px;
+  padding: 32px 20px;
+  background: #fafbfe;
+}
+.sm-domain-empty h2 {
+  font-size: 16px;
+  margin: 0;
+  color: #525d73;
+}
+.sm-domain-empty p {
+  font-size: 12px;
+  color: #8790a2;
+  margin: 8px 0 0;
+}
+@media (max-width: 800px) {
+  .sm-domain-create {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sm-domain-intro {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .sm-domain-dns dl {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sm-domain-dns dt {
+    border-bottom: 0;
+  }
+  .sm-domain-dns dt:last-of-type {
+    border-bottom: 0;
+  }
+  .sm-domain-card-heading,
+  .sm-domain-primary-actions,
+  .sm-domain-enabled-services {
+    padding: 16px;
+  }
+  .sm-domain-dns dl {
+    margin: 0 16px;
+  }
+  .sm-domain-options-body {
+    padding: 0 16px 16px;
+  }
+}

@@ -61,21 +61,41 @@ export function createManagementApi({
     resource === "items"
       ? `/${kind}/${scope}/${kind === "shop" ? "products" : "posts"}`
       : `/taxonomy/${kind}/${scope}/${resource}`;
+  const siteRoot = (kind, scope) =>
+    kind === "site" ? `/business-site/${scope}` : `/site/${kind}/${scope}`;
   return {
+    domainSettings: (signal) => request("/domain-settings", { signal }),
+    saveDomainSettings: (body) =>
+      request("/domain-settings", { method: "PUT", body }),
+    provisionDomain: (scope, id) =>
+      request(`/domains/${scope}/${id}/provision`, { method: "POST" }),
+    deprovisionDomain: (scope, id) =>
+      request(`/domains/${scope}/${id}/deprovision`, { method: "POST" }),
+    domains: (scope, signal) => request(`/domains/${scope}`, { signal }),
+    createDomain: (scope, body) =>
+      request(`/domains/${scope}`, { method: "POST", body }),
+    verifyDomain: (scope, id) =>
+      request(`/domains/${scope}/${id}/verify`, { method: "POST" }),
+    updateDomain: (scope, id, body) =>
+      request(`/domains/${scope}/${id}`, { method: "PATCH", body }),
+    removeDomain: (scope, id) =>
+      request(`/domains/${scope}/${id}`, { method: "DELETE" }),
     siteList: (kind, scope, resource, page = 1, signal) =>
       request(
-        `/site/${kind}/${scope}/${resource}${["settings", "audit"].includes(resource) ? "" : `?page=${page}`}`,
+        `${siteRoot(kind, scope)}/${resource}${["settings", "audit"].includes(resource) ? "" : `?page=${page}`}`,
         { signal },
       ),
     siteSettings: (kind, scope, body) =>
-      request(`/site/${kind}/${scope}/settings`, { method: "PUT", body }),
+      request(`${siteRoot(kind, scope)}/settings`, { method: "PUT", body }),
     siteSave: (kind, scope, resource, id, body) =>
-      request(`/site/${kind}/${scope}/${resource}${id ? `/${id}` : ""}`, {
+      request(`${siteRoot(kind, scope)}/${resource}${id ? `/${id}` : ""}`, {
         method: id ? "PUT" : "POST",
         body,
       }),
     siteRemove: (kind, scope, resource, id) =>
-      request(`/site/${kind}/${scope}/${resource}/${id}`, { method: "DELETE" }),
+      request(`${siteRoot(kind, scope)}/${resource}/${id}`, {
+        method: "DELETE",
+      }),
     siteUrl: (kind, scope, path) =>
       `${baseUrl.replace(/\/$/, "")}/api/site/${kind}/${scope}/${path}`,
 

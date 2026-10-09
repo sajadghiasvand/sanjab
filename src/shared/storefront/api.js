@@ -32,11 +32,38 @@ export function createPublicApi(
             : data.Message || data.message || "خطا در دریافت اطلاعات",
       );
       error.status = response.status;
+      const publication = path.match(
+        /^\/(shop|blog)\/([1-9][0-9]*)\/(products|posts|archives)\//,
+      );
+      if (
+        response.status === 404 &&
+        publication &&
+        typeof window !== "undefined"
+      ) {
+        fetchImpl(`${origin}/api/site/site/${publication[2]}/missing`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            path: window.location.pathname,
+            referrer: document.referrer || "",
+          }),
+        }).catch(() => {});
+      }
       throw error;
     }
     return Object.hasOwn(data, "Data") ? data.Data : data;
   }
   return {
+    siteRuntime: (scope, path, signal) =>
+      get(
+        `/site/site/${scope}/runtime?path=${encodeURIComponent(path)}`,
+        signal,
+      ),
+    resolveHostname: (hostname, signal) =>
+      get(
+        `/public/domains/resolve?hostname=${encodeURIComponent(hostname)}`,
+        signal,
+      ),
     catalog: (scope, filters, signal) =>
       get(`/shop/${scope}/catalog?${new URLSearchParams(filters)}`, signal),
     product: (scope, slug, signal) =>

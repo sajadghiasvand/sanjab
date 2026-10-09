@@ -1,4 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { BusinessSiteContext } from "./siteContext.js";
+import { BusinessSiteRuntime } from "./BusinessSiteRuntime";
+import { DomainContext } from "./domainContext";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
 import DOMPurify from "dompurify";
 import {
@@ -93,6 +96,8 @@ function Pager({ total, page, size, onChange }) {
 }
 const money = (value) => `${Number(value).toLocaleString("fa-IR")} ریال`;
 function Metadata({ title, description = "", seo = {}, schemas = [] }) {
+  const siteOrigin = useContext(BusinessSiteContext);
+  const domain = useContext(DomainContext);
   useEffect(() => {
     const originalTitle = document.title,
       cleanups = [];
@@ -132,7 +137,12 @@ function Metadata({ title, description = "", seo = {}, schemas = [] }) {
       old = link.getAttribute("href");
     link.rel = "canonical";
     link.href =
-      seo.canonicalUrl || window.location.origin + window.location.pathname;
+      seo.canonicalUrl ||
+      (siteOrigin || (domain
+        ? window.location.pathname.startsWith("/blog")
+          ? domain.blogOrigin
+          : domain.shopOrigin
+        : window.location.origin)) + window.location.pathname;
     if (!existing) document.head.appendChild(link);
     cleanups.push(() => {
       if (existing) link.setAttribute("href", old || "");
@@ -149,7 +159,7 @@ function Metadata({ title, description = "", seo = {}, schemas = [] }) {
       document.title = originalTitle;
       cleanups.forEach((cleanup) => cleanup());
     };
-  }, [title, description, seo, schemas]);
+  }, [title, description, seo, schemas, domain, siteOrigin]);
   return null;
 }
 function ShopIndex({ api, scope, root }) {
@@ -561,11 +571,12 @@ export function Storefront({
   CustomerBlogComments,
   CustomerProductComments,
 }) {
+  const domain = useContext(DomainContext);
   const params = useParams();
   const [search] = useSearchParams();
   let scope;
   try {
-    scope = storefrontScope(params.businessId);
+    scope = domain ? domain.scopeId : storefrontScope(params.businessId);
   } catch (error) {
     return (
       <div className="sf-state" role="alert">
@@ -573,8 +584,20 @@ export function Storefront({
       </div>
     );
   }
+  const feature =
+    view.startsWith("blog") || view === "article" ? "blog" : "shop";
+  if (domain && !domain[`${feature}Enabled`])
+    return (
+      <div dir="rtl" role="alert" className="sf-state">
+        این بخش برای این دامنه فعال نیست.
+      </div>
+    );
+  if (domain && params.businessId)
+    return <Navigate to={`/${feature}`} replace />;
   const callbackPath =
-    view === "shop-cart" ? checkoutReturnPath(search.toString(), scope) : null;
+    !domain && view === "shop-cart"
+      ? checkoutReturnPath(search.toString(), scope)
+      : null;
   if (callbackPath) return <Navigate to={callbackPath} replace />;
   return (
     <ScopedStorefront
@@ -598,95 +621,112 @@ function ScopedStorefront({
   CustomerBlogComments,
   CustomerProductComments,
 }) {
+  const domain = useContext(DomainContext);
   const Cart = CustomerShop;
   const api = useMemo(() => createPublicApi(baseUrl), [baseUrl]);
-  const root = storefrontRoot(scope);
+  const root = domain ? "" : storefrontRoot(scope);
   return (
-    <div
-      className={`sf-site${scope === 0 && (view.startsWith("shop") || view === "product") ? " sf-pos" : ""}`}
-      dir="rtl"
-      lang="fa"
-    >
-      <header className="sf-header">
-        <Link className="sf-brand" to={root ? `${root}/shop` : "/"}>
-          سنجاب
-          <span>
-            {scope > 0 ? "فروشگاه و وبلاگ کسب‌وکار" : "فروشگاه و وبلاگ"}
-          </span>
-        </Link>
-        <nav aria-label="ناوبری سایت">
-          <Link
-            to={`${root}/shop`}
-            aria-current={
-              view.startsWith("shop") || view === "product" ? "page" : undefined
-            }
-          >
-            فروشگاه
+    <BusinessSiteRuntime api={api} scope={scope} root={root}>
+      <div
+        className={`sf-site${scope === 0 && (view.startsWith("shop") || view === "product") ? " sf-pos" : ""}`}
+        dir="rtl"
+        lang="fa"
+      >
+        <header className="sf-header">
+          <Link className="sf-brand" to={root ? `${root}/shop` : "/"}>
+            سنجاب
+            <span>
+              {scope > 0 ? "فروشگاه و وبلاگ کسب‌وکار" : "فروشگاه و وبلاگ"}
+            </span>
           </Link>
-          <Link
-            to={`${root}/blog`}
-            aria-current={
-              view.startsWith("blog") || view === "article" ? "page" : undefined
-            }
-          >
-            وبلاگ
-          </Link>
-          <Link to={`${root}/shop/cart`}>سبد خرید و سفارش‌ها</Link>
-        </nav>
-      </header>
-      <main className="sf-main">
-        {view === "shop" && <ShopIndex api={api} scope={scope} root={root} />}{" "}
-        {view === "product" && (
-          <Product
-            key={params.slug}
-            api={api}
-            scope={scope}
-            root={root}
-            slug={params.slug}
-            CustomerProductComments={CustomerProductComments}
-          />
-        )}{" "}
-        {view === "blog" && <BlogIndex api={api} scope={scope} root={root} />}{" "}
-        {view === "blog-archive" && (
-          <BlogIndex
-            api={api}
-            scope={scope}
-            root={root}
-            type={params.type}
-            slug={params.slug}
-          />
-        )}{" "}
-        {view === "article" && (
-          <Article
-            key={params.slug}
-            api={api}
-            scope={scope}
-            root={root}
-            slug={params.slug}
-            CustomerBlogComments={CustomerBlogComments}
-          />
-        )}{" "}
-        {view === "shop-cart" && (
-          <>
-            <Metadata
-              title="حساب مشتری"
-              seo={{ index: false, follow: false }}
+          <nav aria-label="ناوبری سایت">
+            {(!domain || domain.shopEnabled) && (
+              <Link
+                to={`${root}/shop`}
+                aria-current={
+                  view.startsWith("shop") || view === "product"
+                    ? "page"
+                    : undefined
+                }
+              >
+                فروشگاه
+              </Link>
+            )}
+            {(!domain || domain.blogEnabled) && (
+              <Link
+                to={`${root}/blog`}
+                aria-current={
+                  view.startsWith("blog") || view === "article"
+                    ? "page"
+                    : undefined
+                }
+              >
+                وبلاگ
+              </Link>
+            )}
+            {(!domain || domain.shopEnabled) && (
+              <Link to={`${root}/shop/cart`}>سبد خرید و سفارش‌ها</Link>
+            )}
+          </nav>
+        </header>
+        <main className="sf-main">
+          {view === "shop" && <ShopIndex api={api} scope={scope} root={root} />}{" "}
+          {view === "product" && (
+            <Product
+              key={params.slug}
+              api={api}
+              scope={scope}
+              root={root}
+              slug={params.slug}
+              CustomerProductComments={CustomerProductComments}
             />
-            <div className="sf-paper">
-              <Cart scopeId={scope} />
-            </div>
-          </>
-        )}
-      </main>
-      <footer className="sf-footer">
-        <Link to={`${root}/shop`}>فروشگاه</Link>
-        <Link to={`${root}/blog`}>وبلاگ</Link>
-        <span>
-          {scope === 0 && (view.startsWith("shop") || view === "product")
-            ? "© سنجاب — فروشگاه"
-            : "سنجاب"}
-        </span>
-      </footer>
-    </div>
+          )}{" "}
+          {view === "blog" && <BlogIndex api={api} scope={scope} root={root} />}{" "}
+          {view === "blog-archive" && (
+            <BlogIndex
+              api={api}
+              scope={scope}
+              root={root}
+              type={params.type}
+              slug={params.slug}
+            />
+          )}{" "}
+          {view === "article" && (
+            <Article
+              key={params.slug}
+              api={api}
+              scope={scope}
+              root={root}
+              slug={params.slug}
+              CustomerBlogComments={CustomerBlogComments}
+            />
+          )}{" "}
+          {view === "shop-cart" && (
+            <>
+              <Metadata
+                title="حساب مشتری"
+                seo={{ index: false, follow: false }}
+              />
+              <div className="sf-paper">
+                <Cart scopeId={scope} />
+              </div>
+            </>
+          )}
+        </main>
+        <footer className="sf-footer">
+          {(!domain || domain.shopEnabled) && (
+            <Link to={`${root}/shop`}>فروشگاه</Link>
+          )}
+          {(!domain || domain.blogEnabled) && (
+            <Link to={`${root}/blog`}>وبلاگ</Link>
+          )}
+          <span>
+            {scope === 0 && (view.startsWith("shop") || view === "product")
+              ? "© سنجاب — فروشگاه"
+              : "سنجاب"}
+          </span>
+        </footer>
+      </div>
+    </BusinessSiteRuntime>
   );
 }
