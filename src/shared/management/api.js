@@ -22,7 +22,7 @@ export function readBusinessScope() {
 }
 
 export function createManagementApi({
-  baseUrl,
+  baseUrl = "",
   getToken = readManagementToken,
   fetchImpl = (...args) => fetch(...args),
 }) {

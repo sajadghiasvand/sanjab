@@ -13,6 +13,7 @@ import {
 import "./storefront.css";
 import "./pos-tokens.css";
 import "./pos-theme.css";
+import "./academy-theme.css";
 function useResource(load) {
   const [state, setState] = useState({ loading: true, data: null, error: "" });
   useEffect(() => {
@@ -96,7 +97,7 @@ function Pager({ total, page, size, onChange }) {
 }
 const money = (value) => `${Number(value).toLocaleString("fa-IR")} ریال`;
 function Metadata({ title, description = "", seo = {}, schemas = [] }) {
-  const siteOrigin = useContext(BusinessSiteContext);
+  const siteOrigin = useContext(BusinessSiteContext)?.canonicalOrigin;
   const domain = useContext(DomainContext);
   useEffect(() => {
     const originalTitle = document.title,
@@ -163,6 +164,9 @@ function Metadata({ title, description = "", seo = {}, schemas = [] }) {
   return null;
 }
 function ShopIndex({ api, scope, root }) {
+  const site = useContext(BusinessSiteContext);
+  const domain = useContext(DomainContext);
+  const academy = scope > 0 && site?.template === "academy";
   const [params, setParams] = useSearchParams();
   const page = Math.max(1, Number(params.get("page")) || 1);
   const filters = useMemo(
@@ -183,6 +187,7 @@ function ShopIndex({ api, scope, root }) {
     [api, scope, filters],
   );
   const state = useResource(load);
+  const heroImage = academy ? state.data?.items.find((item) => item.seo?.ogImageUrl)?.seo.ogImageUrl : null;
   const change = (key, value) => {
     const next = new URLSearchParams(params);
     value ? next.set(key, value) : next.delete(key);
@@ -192,6 +197,11 @@ function ShopIndex({ api, scope, root }) {
   return (
     <>
       <Metadata title="فروشگاه" />
+      {academy && <nav className="sf-academy-shortcuts" aria-label="دسترسی سریع">
+        <Link to={`${root}/shop`}><span>✦</span>محصولات و دوره‌ها</Link>
+        {(!domain || domain.blogEnabled) && <Link to={`${root}/blog`}><span>▤</span>وبلاگ</Link>}
+        <Link to={`${root}/shop/cart`}><span>▣</span>سبد خرید</Link>
+      </nav>}
       <div className="sf-hero">
         <p>فروشگاه</p>
         {scope === 0 && (
@@ -212,6 +222,8 @@ function ShopIndex({ api, scope, root }) {
             <>
               فروشگاه سنجاب — انتخاب و <span>خرید آسان</span>
             </>
+          ) : academy && site?.businessTitle ? (
+            `به ${site.businessTitle} خوش آمدید`
           ) : (
             "انتخاب کنید، یاد بگیرید، شروع کنید."
           )}
@@ -219,7 +231,10 @@ function ShopIndex({ api, scope, root }) {
         <span>
           محصولات و دوره‌ها را بررسی کنید و خریدهای خود را در حساب مشتری ببینید.
         </span>
+        {heroImage && <img className="sf-academy-hero-image" src={heroImage} alt="" />}
       </div>
+      {academy && <div className="sf-academy-heading"><div><h2>محصولات و دوره‌ها</h2><span>محصولات و آموزش‌های منتشرشده</span></div><a href="#sf-catalog">مشاهده محصولات</a></div>}
+      <div id="sf-catalog">
       <div className="sf-filters">
         {[
           ["search", "جستجو"],
@@ -310,6 +325,7 @@ function ShopIndex({ api, scope, root }) {
           </>
         )}
       </State>
+      </div>
     </>
   );
 }
@@ -627,14 +643,22 @@ function ScopedStorefront({
   const root = domain ? "" : storefrontRoot(scope);
   return (
     <BusinessSiteRuntime api={api} scope={scope} root={root}>
+      <StorefrontFrame {...{ scope, params, view, CustomerBlogComments, CustomerProductComments, Cart, api, root, domain }} />
+    </BusinessSiteRuntime>
+  );
+}
+function StorefrontFrame({ scope, params, view, CustomerBlogComments, CustomerProductComments, Cart, api, root, domain }) {
+  const site = useContext(BusinessSiteContext);
+  const academy = scope > 0 && site?.template === "academy";
+  return (
       <div
-        className={`sf-site${scope === 0 && (view.startsWith("shop") || view === "product") ? " sf-pos" : ""}`}
+        className={`sf-site${scope === 0 && (view.startsWith("shop") || view === "product") ? " sf-pos" : ""}${academy ? " sf-academy" : ""}`}
         dir="rtl"
         lang="fa"
       >
         <header className="sf-header">
           <Link className="sf-brand" to={root ? `${root}/shop` : "/"}>
-            سنجاب
+            {academy ? site?.businessTitle || "فروشگاه" : "سنجاب"}
             <span>
               {scope > 0 ? "فروشگاه و وبلاگ کسب‌وکار" : "فروشگاه و وبلاگ"}
             </span>
@@ -727,6 +751,5 @@ function ScopedStorefront({
           </span>
         </footer>
       </div>
-    </BusinessSiteRuntime>
   );
 }

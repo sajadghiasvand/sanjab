@@ -42,6 +42,8 @@ export function BusinessSiteRuntime({ api, scope, root, children }) {
             redirect: frontendSitePath(data.redirect?.to, scope, root),
             tracking: data.tracking || null,
             canonicalOrigin: data.canonicalOrigin || null,
+            template: data.template === "academy" ? "academy" : "default",
+            businessTitle: typeof data.businessTitle === "string" ? data.businessTitle : "",
           });
       })
       .catch(() => {
@@ -84,5 +86,5 @@ export function BusinessSiteRuntime({ api, scope, root, children }) {
     );
   if (state.redirect && state.redirect !== location.pathname)
     return pageRedirect ? null : <Navigate to={state.redirect} replace />;
-  return <BusinessSiteContext.Provider value={scope > 0 ? state.canonicalOrigin : null}>{children}</BusinessSiteContext.Provider>;
+  return <BusinessSiteContext.Provider value={scope > 0 ? { canonicalOrigin: state.canonicalOrigin, template: state.template, businessTitle: state.businessTitle } : null}>{children}</BusinessSiteContext.Provider>;
 }
