@@ -575,6 +575,9 @@
   color: #667085;
   white-space: nowrap;
 }
+.sm-header-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.sm-public-site-link { display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px; border: 1px solid var(--sm-accent-border, #f5d1c7); border-radius: 10px; background: var(--sm-accent-soft, #fff3ef); color: var(--sm-accent-strong, #a53b2f); font-size: 12px; font-weight: 700; text-decoration: none; }
+.sm-public-site-link:focus-visible { outline: 2px solid var(--sm-accent, #e96554); outline-offset: 3px; }
 .sm-module-tabs {
   display: flex;
   gap: 6px;
