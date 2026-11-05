@@ -187,6 +187,10 @@ export function createManagementApi({
       request(`/shop/${scope}/orders?page=${page}`, { signal }),
     order: (scope, id, signal) =>
       request(`/shop/${scope}/orders/${id}`, { signal }),
+    orderDocuments: (scope, id, signal) =>
+      request(`/shop/${scope}/orders/${id}/documents`, { signal }),
+    orderDocument: (scope, id, key) =>
+      request(`/shop/${scope}/orders/${id}/documents/${encodeURIComponent(key)}`, { asBlob: true }),
     fulfillOrder: (scope, id) =>
       request(`/shop/${scope}/orders/${id}/fulfill`, { method: "POST" }),
     cancelOrder: (scope, id) =>
