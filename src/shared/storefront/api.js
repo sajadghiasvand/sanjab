@@ -64,6 +64,7 @@ export function createPublicApi(
         `/public/domains/resolve?hostname=${encodeURIComponent(hostname)}`,
         signal,
       ),
+    categories: (scope, signal) => get(`/shop/${scope}/categories`, signal),
     catalog: (scope, filters, signal) =>
       get(`/shop/${scope}/catalog?${new URLSearchParams(filters)}`, signal),
     product: (scope, slug, signal) =>
@@ -75,6 +76,7 @@ export function createPublicApi(
       ),
     article: (scope, slug, signal) =>
       get(`/blog/${scope}/posts/${encodeURIComponent(slug)}`, signal),
+    productImage: (scope, id) => `${origin}/api/shop/${scope}/images/${id}`,
     media: (scope, id) => `${origin}/api/blog/${scope}/media/${id}/file`,
   };
 }

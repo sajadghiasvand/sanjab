@@ -163,7 +163,34 @@ function Metadata({ title, description = "", seo = {}, schemas = [] }) {
   }, [title, description, seo, schemas, domain, siteOrigin]);
   return null;
 }
-function ShopIndex({ api, scope, root }) {
+function AcademyFilters({ filters, change }) {
+  return <div className="sf-filters">{[["search", "جستجو"], ["level", "سطح دوره"], ["minPrice", "حداقل قیمت (ریال)"], ["maxPrice", "حداکثر قیمت (ریال)"]].map(([key, label]) => <label key={key}>{label}<input value={filters[key]} maxLength={key.includes("Price") ? 14 : 200} inputMode={key.includes("Price") ? "numeric" : undefined} onChange={(event) => change(key, event.target.value)} /></label>)}<label>مرتب‌سازی<select value={filters.sort} onChange={(event) => change("sort", event.target.value)}><option value="newest">جدیدترین</option><option value="popular">پرفروش‌ترین</option><option value="price-asc">ارزان‌ترین</option><option value="price-desc">گران‌ترین</option></select></label></div>;
+}
+function AcademyArticles({ api, scope, root, enabled }) {
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    if (!enabled) return undefined;
+    const controller = new AbortController();
+    api.posts(scope, 1, undefined, undefined, controller.signal).then((data) => { if (!controller.signal.aborted) setPosts(Array.isArray(data.items) ? data.items.slice(0, 4) : []); }).catch(() => {});
+    return () => controller.abort();
+  }, [api, scope, enabled]);
+  if (!posts.length) return null;
+  return <section className="sf-academy-articles"><div className="sf-academy-heading"><div className="sf-academy-title"><span className="sf-academy-title-icon" aria-hidden="true">▤</span><div><h2>مطالب آموزشی</h2><span>تازه‌ترین نوشته‌ها</span></div></div><Link to={`${root}/blog`}>مشاهده همه ←</Link></div><div className="sf-grid">{posts.map((post) => <Link className="sf-card" key={post.id} to={`${root}/blog/posts/${post.slug}`}><div className="sf-article-image">{post.media?.featuredImageId ? <img src={api.media(scope, post.media.featuredImageId)} alt={post.title} loading="lazy" /> : <span>سنجاب</span>}</div><div className="sf-card-body"><h2>{post.title}</h2>{post.excerpt && <p>{post.excerpt}</p>}<span className="sf-academy-card-action">خواندن مطلب ←</span></div></Link>)}</div></section>;
+}
+function CatalogCategories({ api, scope, selected, change }) {
+  const load = useMemo(() => (signal) => api.categories(scope, signal), [api, scope]);
+  const state = useResource(load);
+  if (state.loading) return <p role="status" className="sf-catalog-category-state">در حال دریافت دسته‌بندی‌ها…</p>;
+  if (state.error) return <p role="alert" className="sf-catalog-category-state">دریافت دسته‌بندی‌ها ناموفق بود: {state.error}</p>;
+  if (!state.data?.length) return null;
+  return <nav className="sf-catalog-categories" aria-label="دسته‌بندی محصولات"><button type="button" className={!selected ? "is-active" : ""} aria-pressed={!selected} onClick={() => change("category", "")}><strong>همه محصولات</strong><span>همه دسته‌ها</span><i aria-hidden="true">✦</i></button>{state.data.map((category) => <button key={category.id} type="button" className={selected === String(category.id) ? "is-active" : ""} aria-pressed={selected === String(category.id)} onClick={() => change("category", String(category.id))}><strong>{category.title}</strong><span>{Number(category.productCount).toLocaleString("fa-IR")} محصول</span><i aria-hidden="true">◈</i></button>)}</nav>;
+}
+function CatalogToolbar({ root, filters, change }) {
+  const [search, setSearch] = useState(filters.search);
+  useEffect(() => setSearch(filters.search), [filters.search]);
+  return <div className="sf-catalog-toolbar"><nav className="sf-catalog-crumb" aria-label="مسیر صفحه"><Link to={`${root}/shop`}>صفحه اصلی</Link><span aria-hidden="true">‹</span><span>محصولات و دوره‌ها</span></nav><form className="sf-catalog-search" onSubmit={(event) => { event.preventDefault(); change("search", search.trim()); }}><label className="sf-catalog-search-label" htmlFor="sf-catalog-search">جستجو در محصولات</label><input id="sf-catalog-search" value={search} onChange={(event) => setSearch(event.target.value)} maxLength={200} placeholder="جستجو در میان محصولات و دوره‌ها" /><button type="submit">جستجو</button></form></div>;
+}
+function ShopIndex({ api, scope, root, catalogPage = false }) {
   const site = useContext(BusinessSiteContext);
   const domain = useContext(DomainContext);
   const academy = scope > 0 && site?.template === "academy";
@@ -172,7 +199,7 @@ function ShopIndex({ api, scope, root }) {
   const filters = useMemo(
     () =>
       Object.fromEntries(
-        ["search", "level", "minPrice", "maxPrice", "sort", "page"].map(
+        ["category", "search", "level", "minPrice", "maxPrice", "sort", "page"].map(
           (key) => [
             key,
             params.get(key) ||
@@ -187,7 +214,8 @@ function ShopIndex({ api, scope, root }) {
     [api, scope, filters],
   );
   const state = useResource(load);
-  const heroImage = academy ? state.data?.items.find((item) => item.seo?.ogImageUrl)?.seo.ogImageUrl : null;
+  const heroProduct = academy ? state.data?.items.find((item) => item.imageIds?.length || item.seo?.ogImageUrl) : null;
+  const heroImage = heroProduct?.imageIds?.length ? api.productImage(scope, heroProduct.imageIds[0]) : heroProduct?.seo?.ogImageUrl;
   const change = (key, value) => {
     const next = new URLSearchParams(params);
     value ? next.set(key, value) : next.delete(key);
@@ -196,14 +224,16 @@ function ShopIndex({ api, scope, root }) {
   };
   return (
     <>
-      <Metadata title="فروشگاه" />
-      {academy && <nav className="sf-academy-shortcuts" aria-label="دسترسی سریع">
-        <Link to={`${root}/shop`}><span>✦</span>محصولات و دوره‌ها</Link>
-        {(!domain || domain.blogEnabled) && <Link to={`${root}/blog`}><span>▤</span>وبلاگ</Link>}
-        <Link to={`${root}/shop/cart`}><span>▣</span>سبد خرید</Link>
+      <Metadata title={catalogPage ? "محصولات و دوره‌ها" : "فروشگاه"} />
+      {catalogPage && <><CatalogToolbar root={root} filters={filters} change={change} /><CatalogCategories api={api} scope={scope} selected={filters.category} change={change} /></>}
+      {!catalogPage && academy && <nav className="sf-academy-shortcuts" aria-label="دسترسی سریع">
+        <a href="#sf-catalog"><span aria-hidden="true">✦</span>دوره‌ها</a>
+        {(!domain || domain.blogEnabled) && <Link to={`${root}/blog`}><span aria-hidden="true">▤</span>مطالب آموزشی</Link>}
+        <Link to={`${root}/shop/cart`}><span aria-hidden="true">▣</span>سبد خرید</Link>
+        <Link to={`${root}/shop/cart`}><span aria-hidden="true">♙</span>حساب کاربری</Link>
       </nav>}
-      <div className="sf-hero">
-        <p>فروشگاه</p>
+      {!catalogPage && <div className={`sf-hero${academy ? " sf-academy-home-hero" : ""}`}>
+        <p>{academy ? "آموزش و تجربه" : "فروشگاه"}</p>
         {scope === 0 && (
           <div className="sf-shop-mark" aria-hidden="true">
             <svg
@@ -232,10 +262,14 @@ function ShopIndex({ api, scope, root }) {
           محصولات و دوره‌ها را بررسی کنید و خریدهای خود را در حساب مشتری ببینید.
         </span>
         {heroImage && <img className="sf-academy-hero-image" src={heroImage} alt="" />}
-      </div>
-      {academy && <div className="sf-academy-heading"><div><h2>محصولات و دوره‌ها</h2><span>محصولات و آموزش‌های منتشرشده</span></div><a href="#sf-catalog">مشاهده محصولات</a></div>}
+        {academy && <a className="sf-academy-hero-link" href="#sf-catalog">مشاهده دوره‌ها <span aria-hidden="true">←</span></a>}
+      </div>}
+      {(academy || catalogPage) && <div className="sf-academy-heading sf-catalog-heading"><div className="sf-academy-title"><span className="sf-academy-title-icon" aria-hidden="true">✦</span><div><h2>دوره‌های آموزشی</h2><span>محصولات و آموزش‌های منتشرشده</span></div></div>{catalogPage ? <label className="sf-catalog-sort">مرتب‌سازی <select value={filters.sort} onChange={(event) => change("sort", event.target.value)}><option value="newest">جدیدترین</option><option value="popular">پرفروش‌ترین</option><option value="price-asc">ارزان‌ترین</option><option value="price-desc">گران‌ترین</option></select></label> : <Link to={`${root}/shop/products`}>مشاهده همه <span aria-hidden="true">←</span></Link>}</div>}
       <div id="sf-catalog">
-      <div className="sf-filters">
+      {academy && !catalogPage && <details className="sf-academy-filter-toggle" open={Boolean(filters.search || filters.level || filters.minPrice || filters.maxPrice || filters.sort !== "newest")}><summary>جستجو و فیلتر دوره‌ها</summary>
+        <AcademyFilters filters={filters} change={change} />
+      </details>}
+      {!academy && !catalogPage && <div className="sf-filters">
         {[
           ["search", "جستجو"],
           ["level", "سطح دوره"],
@@ -264,7 +298,7 @@ function ShopIndex({ api, scope, root }) {
             <option value="price-desc">گران‌ترین</option>
           </select>
         </label>
-      </div>
+      </div>}
       <State state={state}>
         {(data) => (
           <>
@@ -276,9 +310,9 @@ function ShopIndex({ api, scope, root }) {
                   to={`${root}/shop/products/${product.slug}`}
                 >
                   <div className="sf-product-image">
-                    {product.seo?.ogImageUrl ? (
+                    {product.imageIds?.length || product.seo?.ogImageUrl ? (
                       <img
-                        src={product.seo.ogImageUrl}
+                        src={product.imageIds?.length ? api.productImage(scope, product.imageIds[0]) : product.seo.ogImageUrl}
                         alt={product.title}
                         loading="lazy"
                       />
@@ -287,17 +321,18 @@ function ShopIndex({ api, scope, root }) {
                     )}
                   </div>
                   <div className="sf-card-body">
-                    <span className="sf-label">
+                    {!academy && <span className="sf-label">
                       {product.stock > 0 ? "موجود" : "ناموجود"}
-                    </span>
+                    </span>}
                     <h2>{product.title}</h2>
                     {scope === 0 && (
                       <span className="sf-card-cta">مشاهده و خرید</span>
                     )}
-                    <p>
-                      {product.seo?.metaDescription || "مشاهده جزئیات محصول"}
-                    </p>
+                    {!academy && <p>{product.seo?.metaDescription || "مشاهده جزئیات محصول"}</p>}
+                    {!!product.itemGroups?.length && <div className="sf-course-summary"><strong>سرفصل‌ها</strong>{product.itemGroups.map((group, index) => <p key={index}>{group.name}{group.items?.length ? `: ${group.items.map((item) => item.key).join("، ")}` : ""}</p>)}</div>}
+                    {academy && <div className="sf-academy-card-meta">{!!product.itemGroups?.length && <span>{product.itemGroups.reduce((total, group) => total + (group.items || []).length, 0).toLocaleString("fa-IR")} جلسه</span>}<span>{product.stock > 0 ? "موجود" : "ناموجود"}</span></div>}
                     <div className="sf-card-bottom">
+                      {academy && <span className="sf-academy-card-action">مشاهده و خرید ←</span>}
                       <strong>{money(product.priceRials)}</strong>
                       {product.ratingCount > 0 && (
                         <span>
@@ -326,10 +361,41 @@ function ShopIndex({ api, scope, root }) {
         )}
       </State>
       </div>
+      {academy && !catalogPage && <section className="sf-academy-about"><div className="sf-academy-about-mark" aria-hidden="true"><span>✦</span><strong>{site?.businessTitle || "فروشگاه"}</strong></div><div><span className="sf-academy-eyebrow">آشنایی با مجموعه</span><h2>{site?.businessTitle || "فروشگاه و دوره‌ها"}</h2><p>محصولات و دوره‌های این مجموعه را بررسی کنید و محتوای خریداری‌شده را در حساب خود ببینید.</p><a href="#sf-catalog">مشاهده دوره‌ها ←</a></div></section>}
+      {academy && !catalogPage && <AcademyArticles api={api} scope={scope} root={root} enabled={!domain || domain.blogEnabled} />}
     </>
   );
 }
-function Product({ api, scope, root, slug, CustomerProductComments }) {
+function BusinessProduct({ product, api, scope, root, Comments, access, retry }) {
+  const images = (product.imageIds || []).map((id) => api.productImage(scope, id));
+  if (!images.length && product.seo?.ogImageUrl) images.push(product.seo.ogImageUrl);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const groups = access.status === "purchased" ? access.groups : product.itemGroups || [];
+  const lessonCount = groups.reduce((total, group) => total + (group.items || []).length, 0);
+  return (
+    <div className="sf-course-product">
+      <nav className="sf-course-breadcrumb" aria-label="مسیر صفحه">
+        <Link to={`${root}/shop`}>فروشگاه</Link><span aria-hidden="true">/</span><span>{product.title}</span>
+      </nav>
+      <div className="sf-course-layout">
+        <div className="sf-course-content">
+          <div className="sf-course-media">
+            {images.length ? <img src={images[selectedImage] || images[0]} alt={product.title} /> : <span>سنجاب</span>}
+          </div>
+          {images.length > 1 && <div className="sf-course-thumbnails" aria-label="تصاویر محصول">{images.map((image, index) => <button type="button" className={index === selectedImage ? "is-active" : ""} key={image} onClick={() => setSelectedImage(index)} aria-label={`نمایش تصویر ${index + 1}`} aria-pressed={index === selectedImage}><img src={image} alt="" /></button>)}</div>}
+          <section className="sf-course-section">
+            <h2>توضیحات {groups.length ? "دوره" : "محصول"}</h2>
+            <SafeBody html={product.description} api={api} scope={scope} root={root} />
+          </section>
+          {!!groups.length && <section className="sf-course-section sf-course-lessons"><div className="sf-course-section-heading"><h2>جلسات دوره</h2><span>{lessonCount.toLocaleString("fa-IR")} جلسه</span></div>{groups.map((group, index) => <div className="sf-course-group" key={index}><h3>{group.name}</h3>{(group.items || []).map((item, itemIndex) => <div className="sf-course-lesson" key={itemIndex}><span className="sf-course-lesson-number">{(itemIndex + 1).toLocaleString("fa-IR")}</span><span>{item.key}</span>{access.status === "purchased" ? (/^https?:\/\//i.test(item.value || "") ? <a href={item.value} target="_blank" rel="noopener noreferrer">مشاهده درس یا فایل</a> : <span>{item.value}</span>) : <span className="sf-course-private">پس از خرید</span>}</div>)}</div>)}{access.status !== "purchased" && <p className="sf-course-note">محتوای هر درس پس از خرید و پرداخت در دسترس است.</p>}</section>}
+          <section className="sf-course-section sf-course-comments"><h2>نظرات</h2><Comments scopeId={scope} productId={product.id} /></section>
+        </div>
+        <aside className="sf-course-aside"><div className="sf-course-purchase"><span className="sf-course-kicker">{groups.length ? "دوره آموزشی" : "محصول"}</span><h1>{product.title}</h1><span className="sf-course-stock">{product.stock > 0 ? "موجود" : "ناموجود"}</span><div className="sf-course-price"><span>قیمت</span><strong>{money(product.priceRials)}</strong></div>{access.status === "purchased" ? <span className="sf-primary sf-course-buy">خریداری شده</span> : access.status === "checking" ? <span role="status">در حال بررسی خرید…</span> : access.status === "error" ? <button type="button" onClick={retry}>خطا در بررسی خرید؛ تلاش دوباره</button> : <Link className="sf-primary sf-course-buy" to={`${root}/shop/cart?productId=${product.id}`}>{product.stock > 0 ? (groups.length ? "ثبت نام در دوره" : "خرید محصول") : "مشاهده حساب مشتری"}</Link>}{(product.customFields || []).length > 0 && <dl>{product.customFields.map((field, index) => <div key={index}><dt>{field.key}</dt><dd>{field.value}</dd></div>)}</dl>}</div></aside>
+      </div>
+    </div>
+  );
+}
+function Product({ api, scope, root, slug, CustomerProductComments, CustomerProductAccess }) {
   const Comments = CustomerProductComments;
   const load = useMemo(
     () => (signal) => api.product(scope, slug, signal),
@@ -345,18 +411,20 @@ function Product({ api, scope, root, slug, CustomerProductComments }) {
             description={product.seo?.metaDescription}
             seo={product.seo || {}}
           />
+          {CustomerProductAccess ? <CustomerProductAccess scopeId={scope} productId={product.id}>{(access, retry) => <BusinessProduct key={product.id} product={product} api={api} scope={scope} root={root} Comments={Comments} access={access} retry={retry} />}</CustomerProductAccess> : scope > 0 ? <BusinessProduct key={product.id} product={product} api={api} scope={scope} root={root} Comments={Comments} access={{ status: "guest" }} /> : <>
           <Link className="sf-back" to={`${root}/shop`}>
             بازگشت به فروشگاه
           </Link>
           <div className="sf-product-detail">
             <div className="sf-product-image">
-              {product.seo?.ogImageUrl ? (
-                <img src={product.seo.ogImageUrl} alt={product.title} />
+              {product.imageIds?.length || product.seo?.ogImageUrl ? (
+                <img src={product.imageIds?.length ? api.productImage(scope, product.imageIds[0]) : product.seo.ogImageUrl} alt={product.title} />
               ) : (
                 <span>سنجاب</span>
               )}
             </div>
             <div>
+              {product.imageIds?.length > 1 && <div className="sf-gallery">{product.imageIds.slice(1).map((id) => <img key={id} src={api.productImage(scope, id)} alt={product.title} loading="lazy" />)}</div>}
               <p className="sf-label">
                 {product.stock > 0 ? "موجود" : "ناموجود"}
               </p>
@@ -386,11 +454,13 @@ function Product({ api, scope, root, slug, CustomerProductComments }) {
               scope={scope}
               root={root}
             />
-            {product.itemGroups && <p>درس‌ها پس از خرید در دسترس هستند.</p>}
+
           </section>
+          {!!product.itemGroups?.length && <section className="sf-paper"><h2>سرفصل‌های دوره</h2>{product.itemGroups.map((group, index) => <div key={index}><h3>{group.name}</h3><ul>{(group.items || []).map((item, itemIndex) => <li key={itemIndex}>{item.key}</li>)}</ul></div>)}<p>محتوای هر درس پس از خرید و پرداخت در دسترس است.</p></section>}
           <section className="sf-paper">
             <Comments scopeId={scope} productId={product.id} />
           </section>
+          </>}
         </>
       )}
     </State>
@@ -584,8 +654,10 @@ export function Storefront({
   baseUrl,
   view,
   CustomerShop,
+  CustomerAccount,
   CustomerBlogComments,
   CustomerProductComments,
+  CustomerProductAccess,
 }) {
   const domain = useContext(DomainContext);
   const params = useParams();
@@ -623,8 +695,10 @@ export function Storefront({
       baseUrl={baseUrl}
       view={view}
       CustomerShop={CustomerShop}
+      CustomerAccount={CustomerAccount}
       CustomerBlogComments={CustomerBlogComments}
       CustomerProductComments={CustomerProductComments}
+      CustomerProductAccess={CustomerProductAccess}
     />
   );
 }
@@ -634,29 +708,64 @@ function ScopedStorefront({
   baseUrl,
   view,
   CustomerShop,
+  CustomerAccount,
   CustomerBlogComments,
   CustomerProductComments,
+  CustomerProductAccess,
 }) {
   const domain = useContext(DomainContext);
   const Cart = CustomerShop;
+  const Account = CustomerAccount;
   const api = useMemo(() => createPublicApi(baseUrl), [baseUrl]);
   const root = domain ? "" : storefrontRoot(scope);
   return (
     <BusinessSiteRuntime api={api} scope={scope} root={root}>
-      <StorefrontFrame {...{ scope, params, view, CustomerBlogComments, CustomerProductComments, Cart, api, root, domain }} />
+      <StorefrontFrame {...{ scope, params, view, CustomerBlogComments, CustomerProductComments, CustomerProductAccess, Cart, Account, api, root, domain }} />
     </BusinessSiteRuntime>
   );
 }
-function StorefrontFrame({ scope, params, view, CustomerBlogComments, CustomerProductComments, Cart, api, root, domain }) {
+function AcademyIcon({ type }) {
+  const paths = {
+    home: <><path d="M3 10.5 12 3l9 7.5" /><path d="M5.5 9.5V21h13V9.5M10 21v-7h4v7" /></>,
+    courses: <><path d="m2 8 10-5 10 5-10 5L2 8Z" /><path d="M6 10.5V16c3.5 2.5 8.5 2.5 12 0v-5.5M21 9v7" /></>,
+    blog: <><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5" /></>,
+    cart: <><path d="M3 4h2l2 11h11l2-8H6M9 20h.01M17 20h.01" /><circle cx="9" cy="20" r="1" /><circle cx="17" cy="20" r="1" /></>,
+    user: <><circle cx="12" cy="8" r="3.5" /><path d="M5 21v-2a7 7 0 0 1 14 0v2" /></>,
+  };
+  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">{paths[type]}</svg>;
+}
+function AcademyHeader({ site, root, domain, view, Account, scope }) {
+  const shop = !domain || domain.shopEnabled, blog = !domain || domain.blogEnabled;
+  const home = shop ? `${root}/shop` : `${root}/blog`;
+  return <header className="sf-academy-header"><div className="sf-academy-header-inner">
+    <Link className="sf-academy-logo" to={home}><strong>{site?.businessTitle || "فروشگاه"}</strong><span>فروشگاه و آموزش</span></Link>
+    <nav className="sf-academy-menu" aria-label="ناوبری سایت">
+      {shop && <><Link to={`${root}/shop`} aria-current={view === "shop" ? "page" : undefined}><AcademyIcon type="home" />صفحه اصلی</Link><Link to={`${root}/shop/products`} aria-current={view === "shop-products" ? "page" : undefined}><AcademyIcon type="courses" />دوره‌ها و محصولات</Link></>}
+      {blog && <Link to={`${root}/blog`} aria-current={view.startsWith("blog") || view === "article" ? "page" : undefined}><AcademyIcon type="blog" />وبلاگ</Link>}
+    </nav>
+    {shop && <div className="sf-academy-header-actions"><Link className="sf-academy-cart" to={`${root}/shop/cart`} aria-label="سبد خرید و سفارش‌ها"><AcademyIcon type="cart" /></Link>{Account ? <Account scopeId={scope} accountUrl={`${root}/shop/cart`} /> : <Link className="sf-academy-signin" to={`${root}/shop/cart`}><AcademyIcon type="user" /><span>ورود / حساب کاربری</span></Link>}</div>}
+  </div></header>;
+}
+function AcademyFooter({ site, root, domain }) {
+  const shop = !domain || domain.shopEnabled, blog = !domain || domain.blogEnabled;
+  return <footer className="sf-academy-site-footer"><div className="sf-academy-footer-body">
+    <div className="sf-academy-footer-head"><div><span className="sf-academy-footer-badge" aria-hidden="true">✦</span><div><strong>همراه شما در مسیر یادگیری</strong><p>دوره‌ها و محصولات مجموعه را ببینید.</p></div></div><strong className="sf-academy-footer-brand">{site?.businessTitle || "فروشگاه"}</strong></div>
+    <section className="sf-academy-footer-about"><h2>درباره {site?.businessTitle || "فروشگاه"}</h2><p>محصولات و آموزش‌های منتشرشده را در فروشگاه ببینید و سفارش‌های خود را در حساب کاربری پیگیری کنید.</p></section>
+    <nav className="sf-academy-footer-links" aria-label="پیوندهای پایین صفحه">{shop && <Link to={`${root}/shop`}>فروشگاه و دوره‌ها</Link>}{blog && <Link to={`${root}/blog`}>وبلاگ</Link>}{shop && <Link to={`${root}/shop/cart`}>حساب کاربری و سفارش‌ها</Link>}</nav>
+  </div><div className="sf-academy-footer-bar"><div><span>تمامی حقوق این وب‌سایت متعلق به {site?.businessTitle || "این مجموعه"} است.</span><a href="#sf-top" aria-label="بازگشت به بالای صفحه">↑</a></div></div></footer>;
+}
+function StorefrontFrame({ scope, params, view, CustomerBlogComments, CustomerProductComments, CustomerProductAccess, Cart, Account, api, root, domain }) {
   const site = useContext(BusinessSiteContext);
+  const [search] = useSearchParams();
   const academy = scope > 0 && site?.template === "academy";
   return (
       <div
         className={`sf-site${scope === 0 && (view.startsWith("shop") || view === "product") ? " sf-pos" : ""}${academy ? " sf-academy" : ""}`}
         dir="rtl"
         lang="fa"
+        id="sf-top"
       >
-        <header className="sf-header">
+        {academy ? <AcademyHeader site={site} root={root} domain={domain} view={view} Account={Account} scope={scope} /> : <header className="sf-header">
           <Link className="sf-brand" to={root ? `${root}/shop` : "/"}>
             {academy ? site?.businessTitle || "فروشگاه" : "سنجاب"}
             <span>
@@ -689,12 +798,13 @@ function StorefrontFrame({ scope, params, view, CustomerBlogComments, CustomerPr
               </Link>
             )}
             {(!domain || domain.shopEnabled) && (
-              <Link to={`${root}/shop/cart`}>سبد خرید و سفارش‌ها</Link>
+              <>{Account && <Account scopeId={scope} accountUrl={`${root}/shop/cart`} />}<Link to={`${root}/shop/cart`}>سبد خرید و سفارش‌ها</Link></>
             )}
           </nav>
-        </header>
+        </header>}
         <main className="sf-main">
-          {view === "shop" && <ShopIndex api={api} scope={scope} root={root} />}{" "}
+          {view === "shop" && <ShopIndex api={api} scope={scope} root={root} />}
+          {view === "shop-products" && <ShopIndex api={api} scope={scope} root={root} catalogPage />}{" "}
           {view === "product" && (
             <Product
               key={params.slug}
@@ -703,6 +813,7 @@ function StorefrontFrame({ scope, params, view, CustomerBlogComments, CustomerPr
               root={root}
               slug={params.slug}
               CustomerProductComments={CustomerProductComments}
+              CustomerProductAccess={CustomerProductAccess}
             />
           )}{" "}
           {view === "blog" && <BlogIndex api={api} scope={scope} root={root} />}{" "}
@@ -725,19 +836,19 @@ function StorefrontFrame({ scope, params, view, CustomerBlogComments, CustomerPr
               CustomerBlogComments={CustomerBlogComments}
             />
           )}{" "}
-          {view === "shop-cart" && (
+          {(view === "shop-cart" || view === "shop-orders") && (
             <>
               <Metadata
                 title="حساب مشتری"
                 seo={{ index: false, follow: false }}
               />
               <div className="sf-paper">
-                <Cart scopeId={scope} />
+                <Cart scopeId={scope} productId={search.get("productId") || undefined} catalogUrl={`${root}/shop/products`} ordersOnly={view === "shop-orders"} />
               </div>
             </>
           )}
         </main>
-        <footer className="sf-footer">
+        {academy ? <AcademyFooter site={site} root={root} domain={domain} /> : <footer className="sf-footer">
           {(!domain || domain.shopEnabled) && (
             <Link to={`${root}/shop`}>فروشگاه</Link>
           )}
@@ -749,7 +860,7 @@ function StorefrontFrame({ scope, params, view, CustomerBlogComments, CustomerPr
               ? "© سنجاب — فروشگاه"
               : "سنجاب"}
           </span>
-        </footer>
+        </footer>}
       </div>
   );
 }

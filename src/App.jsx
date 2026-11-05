@@ -39,10 +39,12 @@ export default function App() {
               }
             />
             <Route path="/shop" element={<PublicStorefront view="shop" />} />
+            <Route path="/shop/products" element={<PublicStorefront view="shop-products" />} />
             <Route
               path="/shop/products/:slug"
               element={<PublicStorefront view="product" />}
             />
+            <Route path="/shop/orders" element={<PublicStorefront view="shop-orders" />} />
             <Route
               path="/shop/cart"
               element={<PublicStorefront view="shop-cart" />}
@@ -60,10 +62,12 @@ export default function App() {
               path="/business/:businessId/shop"
               element={<PublicStorefront view="shop" />}
             />
+            <Route path="/business/:businessId/shop/products" element={<PublicStorefront view="shop-products" />} />
             <Route
               path="/business/:businessId/shop/products/:slug"
               element={<PublicStorefront view="product" />}
             />
+            <Route path="/business/:businessId/shop/orders" element={<PublicStorefront view="shop-orders" />} />
             <Route
               path="/business/:businessId/shop/cart"
               element={<PublicStorefront view="shop-cart" />}

@@ -1,10 +1,12 @@
 export function readManagementToken() {
+  const token = localStorage.getItem("jwt");
+  if (token) return token;
   const cookie = document.cookie
     .split("; ")
     .find((row) => row.startsWith("jwt="));
   return cookie
     ? decodeURIComponent(cookie.slice(4))
-    : localStorage.getItem("jwt");
+    : null;
 }
 
 // Display scope only. The backend remains responsible for authorization.
@@ -166,6 +168,12 @@ export function createManagementApi({
       ),
     mediaSelected: (scope, ids, signal) =>
       request(`/blog/${scope}/media/selected?ids=${ids.join(",")}`, { signal }),
+    uploadProductImage: (scope, file) => {
+      const body = new FormData();
+      body.append("file", file);
+      return request(`/shop/${scope}/images`, { method: "POST", body, formData: true });
+    },
+    productImagePreview: (scope, id, signal) => request(`/shop/${scope}/images/${id}`, { signal, asBlob: true }),
     uploadMedia: (scope, file, details) => {
       const body = new FormData();
       body.append("file", file);

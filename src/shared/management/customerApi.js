@@ -41,6 +41,7 @@ export function createCustomerApi({
     checkOtp: (scope, body) =>
       request(`/customer/${scope}/auth/otp/check`, { method: "POST", body }),
     me: (scope) => request(`/customer/${scope}/auth/me`),
+    updateMe: (scope, body) => request(`/customer/${scope}/auth/me`, { method: "PATCH", body }),
     productComments: (scope, productId, page = 1, signal) =>
       request(`/shop/${scope}/products/${productId}/comments?page=${page}`, {
         signal,
