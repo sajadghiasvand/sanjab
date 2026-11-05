@@ -17,4 +17,6 @@ Main-project pages are `/shop` and `/blog`; business pages are `/business/:busin
 
 Configure `VITE_PUBLIC_API_URL` in the frontend environment. Empty uses a same-origin `/api` proxy. The production host must serve `index.html` for these deep routes. Use Node 22 for Vite builds. Customer login, cart/orders, purchased lessons, blog comments and product ratings use the existing backend customer APIs.
 
+For local development, run `npm run dev` in this repository. The public frontend uses `http://localhost:5180`; both management panels use this origin by default. Set `VITE_PUBLIC_SITE_URL` in the panels if the public frontend is hosted elsewhere.
+
 From the backend checkout, run `node scripts/sync-storefront-ui.mjs` after changing shared public/customer code; `--check` verifies synchronization. These shared files should not be independently edited in this checkout.
