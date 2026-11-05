@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Hero from '../../components/store/Hero';
 import DocsPreviewPanel from '../../components/store/DocsPreviewPanel';
 import { FEATURE_CARDS, getDocumentsForPlan } from '../../data/storeMockData';
-import { CustomerShop } from '../../shared/management/CustomerAccess';
+import { CustomerShop } from '../../shared/platform-management/CustomerAccess';
 import { clearPaymentReturn } from './paymentReturn';
 import '../../styles/store.css';
 

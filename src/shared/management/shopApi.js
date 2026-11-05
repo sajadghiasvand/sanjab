@@ -13,10 +13,10 @@ export function createShopApi({
       method,
       signal,
       headers: {
-        ...(body instanceof FormData ? {} : { "Content-Type": "application/json" }),
+        "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
-      ...(body === undefined ? {} : { body: body instanceof FormData ? body : JSON.stringify(body) }),
+      ...(body === undefined ? {} : { body: JSON.stringify(body) }),
     });
     const data = await response.json();
     if (!response.ok || data.Code >= 400) {
@@ -33,6 +33,15 @@ export function createShopApi({
       : data;
   }
   return {
+    browse: (scope, page = 1, signal, filters = {}) =>
+      request(
+        scope,
+        `/catalog?${new URLSearchParams({ page: String(page), ...filters })}`,
+        { signal },
+      ),
+    lessons: (scope, productId) =>
+      request(scope, `/products/${productId}/lessons`),
+
     catalog: (scope, page = 1, signal) =>
       request(scope, `/products?page=${page}`, { signal }),
     cart: (scope, signal) => request(scope, "/cart", { signal }),
@@ -46,15 +55,9 @@ export function createShopApi({
     clear: (scope) => request(scope, "/cart", { method: "DELETE" }),
     checkout: (scope, body) =>
       request(scope, "/cart/checkout", { method: "POST", body }),
-    orders: (scope, page = 1, signal, paidOnly = false) =>
-      request(scope, `/orders?page=${page}${paidOnly ? "&paidOnly=true" : ""}`, { signal }),
+    orders: (scope, page = 1, signal) =>
+      request(scope, `/orders?page=${page}`, { signal }),
     order: (scope, id, signal) => request(scope, `/orders/${id}`, { signal }),
-    documents: (scope, id, signal) => request(scope, `/orders/${id}/documents`, { signal }),
-    uploadDocument: (scope, id, key, file) => {
-      const body = new FormData();
-      body.append("file", file);
-      return request(scope, `/orders/${id}/documents/${encodeURIComponent(key)}`, { method: "POST", body });
-    },
     cancel: (scope, id) =>
       request(scope, `/orders/${id}/cancel`, { method: "POST" }),
     pay: (scope, id) =>

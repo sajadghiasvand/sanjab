@@ -1,0 +1,357 @@
+/* Main-project shop uses the existing POS landing's design tokens and compact layout. */
+.sf-site.sf-pos {
+  --sf-accent: var(--orange);
+  --sf-ink: var(--ink);
+  --sf-muted: var(--ink-soft);
+  font-family: "Vazirmatn", sans-serif;
+  background: var(--paper);
+  line-height: 1.6;
+}
+.sf-pos .sf-header,
+.sf-pos .sf-main,
+.sf-pos .sf-footer {
+  max-width: 640px;
+  padding-inline: 20px;
+}
+.sf-pos .sf-header {
+  padding-top: 16px;
+  padding-bottom: 6px;
+  border: 0;
+  gap: 16px;
+}
+.sf-pos .sf-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 800;
+}
+.sf-pos .sf-brand::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--orange);
+}
+.sf-pos .sf-brand > span {
+  display: none;
+}
+.sf-pos .sf-header nav {
+  gap: 14px;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+.sf-pos .sf-main {
+  padding-top: 0;
+  padding-bottom: 60px;
+}
+.sf-pos .sf-hero {
+  background: none;
+  padding: 20px 0 26px;
+  text-align: center;
+  margin: 0;
+  border-radius: 0;
+}
+.sf-pos .sf-hero > p {
+  display: none;
+}
+.sf-pos .sf-hero h1 {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.5;
+  margin: 0;
+}
+.sf-pos .sf-hero h1 span {
+  color: var(--orange);
+}
+.sf-pos .sf-hero > span {
+  display: block;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 10px auto 0;
+  max-width: 420px;
+}
+.sf-pos .sf-shop-mark {
+  width: 76px;
+  height: 90px;
+  margin: 0 auto 20px;
+  background: linear-gradient(150deg, var(--orange), var(--orange-light));
+  border-radius: 18px;
+  box-shadow: 0 12px 30px #dc4d0120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+.sf-pos .sf-shop-mark svg {
+  width: 42px;
+  height: 42px;
+}
+.sf-pos .sf-filters {
+  border-color: var(--line);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 18px;
+  gap: 12px;
+  margin: 0 0 22px;
+}
+.sf-pos .sf-filters label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  min-width: 140px;
+}
+.sf-pos .sf-filters input,
+.sf-pos .sf-filters select {
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  font-size: 13.5px;
+  height: 44px;
+  margin-top: 6px;
+}
+.sf-pos .sf-grid {
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.sf-pos .sf-card {
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  box-shadow: none;
+}
+.sf-pos .sf-card:hover {
+  border-color: var(--orange);
+  box-shadow: var(--shadow);
+}
+.sf-pos .sf-card .sf-product-image {
+  height: 112px;
+  aspect-ratio: auto;
+  border-radius: 12px;
+  background: var(--salmon-light);
+  font-size: 16px;
+}
+.sf-pos .sf-card-body {
+  padding: 0;
+  position: relative;
+}
+.sf-pos .sf-card h2 {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 5px;
+  max-width: calc(100% - 110px);
+}
+.sf-pos .sf-card-body p {
+  font-size: 11.5px;
+  line-height: 1.8;
+  margin: 0 0 10px;
+  color: var(--ink-soft);
+  max-width: calc(100% - 110px);
+}
+.sf-pos .sf-label {
+  font-size: 10px;
+  color: var(--orange-dark);
+  margin: 0 0 6px;
+}
+.sf-pos .sf-card .sf-label {
+  display: inline-block;
+  background: var(--salmon-light);
+  padding: 3px 8px;
+  border-radius: 7px;
+}
+.sf-pos .sf-card-bottom {
+  border-top: 1px dashed var(--line);
+  padding-top: 10px;
+  font-size: 10.5px;
+  flex-wrap: wrap;
+}
+.sf-pos .sf-card-bottom strong {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--orange-dark);
+}
+.sf-pos .sf-card-cta {
+  position: absolute;
+  top: 16px;
+  left: 0;
+  background: var(--orange);
+  color: #fff;
+  border-radius: 11px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 11px 14px;
+  white-space: nowrap;
+}
+.sf-pos .sf-paper {
+  border-color: var(--line);
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+  margin-top: 22px;
+}
+.sf-pos .sf-product-detail {
+  grid-template-columns: 1fr;
+  gap: 22px;
+  margin-top: 16px;
+}
+.sf-pos .sf-product-detail > .sf-product-image {
+  max-height: 280px;
+  border-radius: 20px;
+  background: var(--salmon-light);
+}
+.sf-pos .sf-product-detail > div + div {
+  text-align: center;
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 22px;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+.sf-pos .sf-product-detail h1 {
+  font-size: 22px;
+  line-height: 1.5;
+  margin: 0 0 12px;
+}
+.sf-pos .sf-price {
+  font-size: 27px;
+  font-weight: 800;
+  color: var(--orange-dark);
+  margin-bottom: 16px;
+}
+.sf-pos .sf-primary,
+.sf-pos button {
+  background: var(--orange);
+  border-radius: 11px;
+  padding: 11px 18px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.sf-pos .sf-product-detail dl {
+  text-align: right;
+  font-size: 12px;
+  margin-top: 22px;
+}
+.sf-pos .sf-product-detail dl > div {
+  border-color: var(--line);
+}
+.sf-pos .sf-paper h2,
+.sf-pos .sm-management h1,
+.sf-pos .sm-management h2 {
+  font-size: 16px;
+  font-weight: 800;
+}
+.sf-pos .sf-prose {
+  font-size: 13.5px;
+  line-height: 1.9;
+}
+.sf-pos .sf-prose h2 {
+  font-size: 16px;
+}
+.sf-pos .sf-back {
+  font-size: 12px;
+  color: var(--orange-dark);
+  font-weight: 700;
+  margin: 16px 0 6px;
+}
+.sf-pos .sf-pager {
+  padding: 22px 0;
+  font-size: 12px;
+  gap: 16px;
+}
+.sf-pos .sf-pager button {
+  background: var(--ink);
+  padding: 8px 14px;
+}
+.sf-pos .sf-footer {
+  border: 0;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
+  font-size: 11px;
+  color: var(--ink-faint);
+  margin-top: 0;
+  padding-top: 26px;
+  padding-bottom: 26px;
+}
+.sf-pos .sf-footer span {
+  margin: 0;
+  width: 100%;
+}
+.sf-pos .sm-management input:not([type="checkbox"]),
+.sf-pos .sm-management select,
+.sf-pos .sm-management textarea {
+  width: 100%;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 13px;
+  font-size: 13.5px;
+}
+.sf-pos .sm-management label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.sf-pos .sm-management .sm-secondary {
+  background: var(--ink);
+}
+.sf-pos .sm-management .sm-error {
+  color: var(--red);
+  background: var(--red-light);
+}
+.sf-pos .sm-management .sm-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+.sf-pos .sm-management th,
+.sf-pos .sm-management td {
+  font-size: 12px;
+}
+.sf-pos a:focus-visible,
+.sf-pos input:focus-visible,
+.sf-pos button:focus-visible,
+.sf-pos select:focus-visible {
+  outline-color: var(--orange);
+}
+@media (max-width: 600px) {
+  .sf-pos .sf-header {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .sf-pos .sf-header nav {
+    font-size: 11.5px;
+  }
+  .sf-pos .sf-card {
+    grid-template-columns: 72px minmax(0, 1fr);
+    padding: 14px;
+    gap: 12px;
+  }
+  .sf-pos .sf-card .sf-product-image {
+    height: 96px;
+  }
+  .sf-pos .sf-card h2,
+  .sf-pos .sf-card-body p {
+    max-width: 100%;
+  }
+  .sf-pos .sf-card-cta {
+    position: static;
+    display: inline-block;
+    margin: 4px 0 8px;
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+  .sf-pos .sf-filters label {
+    min-width: 120px;
+  }
+  .sf-pos .sf-card-bottom {
+    gap: 6px;
+  }
+  .sf-pos .sf-card-bottom strong {
+    font-size: 16px;
+  }
+}

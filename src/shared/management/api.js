@@ -22,7 +22,7 @@ export function readBusinessScope() {
 }
 
 export function createManagementApi({
-  baseUrl,
+  baseUrl = "",
   getToken = readManagementToken,
   fetchImpl = (...args) => fetch(...args),
 }) {
@@ -61,7 +61,44 @@ export function createManagementApi({
     resource === "items"
       ? `/${kind}/${scope}/${kind === "shop" ? "products" : "posts"}`
       : `/taxonomy/${kind}/${scope}/${resource}`;
+  const siteRoot = (kind, scope) =>
+    kind === "site" ? `/business-site/${scope}` : `/site/${kind}/${scope}`;
   return {
+    domainSettings: (signal) => request("/domain-settings", { signal }),
+    saveDomainSettings: (body) =>
+      request("/domain-settings", { method: "PUT", body }),
+    provisionDomain: (scope, id) =>
+      request(`/domains/${scope}/${id}/provision`, { method: "POST" }),
+    deprovisionDomain: (scope, id) =>
+      request(`/domains/${scope}/${id}/deprovision`, { method: "POST" }),
+    domains: (scope, signal) => request(`/domains/${scope}`, { signal }),
+    createDomain: (scope, body) =>
+      request(`/domains/${scope}`, { method: "POST", body }),
+    verifyDomain: (scope, id) =>
+      request(`/domains/${scope}/${id}/verify`, { method: "POST" }),
+    updateDomain: (scope, id, body) =>
+      request(`/domains/${scope}/${id}`, { method: "PATCH", body }),
+    removeDomain: (scope, id) =>
+      request(`/domains/${scope}/${id}`, { method: "DELETE" }),
+    siteList: (kind, scope, resource, page = 1, signal) =>
+      request(
+        `${siteRoot(kind, scope)}/${resource}${["settings", "audit"].includes(resource) ? "" : `?page=${page}`}`,
+        { signal },
+      ),
+    siteSettings: (kind, scope, body) =>
+      request(`${siteRoot(kind, scope)}/settings`, { method: "PUT", body }),
+    siteSave: (kind, scope, resource, id, body) =>
+      request(`${siteRoot(kind, scope)}/${resource}${id ? `/${id}` : ""}`, {
+        method: id ? "PUT" : "POST",
+        body,
+      }),
+    siteRemove: (kind, scope, resource, id) =>
+      request(`${siteRoot(kind, scope)}/${resource}/${id}`, {
+        method: "DELETE",
+      }),
+    siteUrl: (kind, scope, path) =>
+      `${baseUrl.replace(/\/$/, "")}/api/site/${kind}/${scope}/${path}`,
+
     productUrl: (scope, slug) =>
       `${baseUrl.replace(/\/$/, "")}/api/shop/${scope}/site/${slug}`,
     promoCodes: (scope, page = 1, signal) =>
@@ -114,9 +151,17 @@ export function createManagementApi({
         method: "POST",
         body: { targetId },
       }),
-    media: (scope, page = 1, search = "", kind = "", signal) =>
+    media: (
+      scope,
+      page = 1,
+      search = "",
+      kind = "",
+      signal,
+      from = "",
+      to = "",
+    ) =>
       request(
-        `/blog/${scope}/media?page=${page}&search=${encodeURIComponent(search)}&kind=${encodeURIComponent(kind)}`,
+        `/blog/${scope}/media?page=${page}&search=${encodeURIComponent(search)}&kind=${encodeURIComponent(kind)}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`,
         { signal },
       ),
     mediaSelected: (scope, ids, signal) =>
@@ -142,6 +187,10 @@ export function createManagementApi({
       request(`/shop/${scope}/orders?page=${page}`, { signal }),
     order: (scope, id, signal) =>
       request(`/shop/${scope}/orders/${id}`, { signal }),
+    orderDocuments: (scope, id, signal) =>
+      request(`/shop/${scope}/orders/${id}/documents`, { signal }),
+    orderDocument: (scope, id, key) =>
+      request(`/shop/${scope}/orders/${id}/documents/${encodeURIComponent(key)}`, { asBlob: true }),
     fulfillOrder: (scope, id) =>
       request(`/shop/${scope}/orders/${id}/fulfill`, { method: "POST" }),
     cancelOrder: (scope, id) =>

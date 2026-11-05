@@ -1,8 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
-import { addSelectedProduct } from "./addSelectedProduct";
-import { checkoutAndPay } from "./checkoutAndPay";
-import OrderDocuments from "../../components/store/OrderDocuments";
 import "./management.css";
 
 const money = (value) => `${Number(value || 0).toLocaleString("fa-IR")} ریال`;
@@ -17,89 +14,78 @@ const statuses = {
 function ShopCartContent({
   api,
   scopeId,
-  initialProductId,
-  showOrders,
-  initialAddress,
   onPayment = (url) => window.location.assign(url),
 }) {
+  const [filters, setFilters] = useState({
+    search: "",
+    level: "",
+    minPrice: "",
+    maxPrice: "",
+    sort: "newest",
+  });
+  const [lessons, setLessons] = useState(null);
   const [cart, setCart] = useState(null);
   const [orders, setOrders] = useState({ items: [], total: 0 });
+  const [catalog, setCatalog] = useState({ items: [], total: 0 });
+  const [page, setPage] = useState(1);
   const [orderPage, setOrderPage] = useState(1);
-  const [address, setAddress] = useState(initialAddress || "");
+  const [productId, setProductId] = useState("");
+  const [quantity, setQuantity] = useState(1);
+  const [address, setAddress] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [note, setNote] = useState("");
   const [order, setOrder] = useState(null);
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [loadedProductId, setLoadedProductId] = useState(null);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [confirmCancel, setConfirmCancel] = useState(false);
   const [revision, setRevision] = useState(0);
   const checkoutAttempt = useRef(null);
-  const selectedRequest = useRef(null);
-  const returnedOrder = Number(new URLSearchParams(window.location.search).get("orderId"));
-  const paidReturn = order && returnedOrder === order.id && ["paid", "fulfilled"].includes(order.status);
-
-  useEffect(() => {
-    if (initialAddress !== undefined) setAddress(initialAddress);
-  }, [initialAddress]);
 
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true);
     setError("");
-    if (initialProductId && (!selectedRequest.current || selectedRequest.current.productId !== initialProductId)) {
-      selectedRequest.current = { productId: initialProductId, promise: addSelectedProduct(api, scopeId, initialProductId), displayed: false };
-    }
-    const selected = initialProductId ? selectedRequest.current : null;
-    (async () => {
-      if (selected && !selected.displayed) {
-        try {
-          const added = await selected.promise;
-          if (controller.signal.aborted) return null;
-          selected.displayed = true;
-          setNotice(added ? "محصول به سبد خرید اضافه شد." : "این محصول در سبد خرید شماست.");
-        } catch (err) {
-          if (controller.signal.aborted) return null;
-          selected.displayed = true;
-          setError(err.message);
-        }
-      }
-      return Promise.all([
-        showOrders ? Promise.resolve(null) : api.cart(scopeId, controller.signal),
-        api.orders(scopeId, orderPage, controller.signal, showOrders),
-      ]);
-    })()
-      .then((result) => {
-        if (!controller.signal.aborted && result) {
-          const [nextCart, nextOrders] = result;
+    Promise.all([
+      api.cart(scopeId, controller.signal),
+      api.orders(scopeId, orderPage, controller.signal),
+      api.browse
+        ? api.browse(scopeId, page, controller.signal, filters)
+        : api.catalog(scopeId, page, controller.signal),
+    ])
+      .then(([nextCart, nextOrders, nextCatalog]) => {
+        if (!controller.signal.aborted) {
           setCart(nextCart);
           setOrders(nextOrders);
-          setLoadedProductId(initialProductId ?? null);
+          setCatalog(nextCatalog);
         }
       })
       .catch((err) => {
-        if (!controller.signal.aborted) {
-          setError(err.message);
-          setLoadedProductId(initialProductId ?? null);
-        }
+        if (!controller.signal.aborted) setError(err.message);
       })
       .finally(() => {
         if (!controller.signal.aborted) setLoading(false);
       });
     return () => controller.abort();
-  }, [api, scopeId, orderPage, revision, initialProductId, showOrders]);
+  }, [api, scopeId, page, orderPage, revision, filters]);
 
   useEffect(() => {
     setCart(null);
     setOrder(null);
+    const selectedProduct = Number(
+      new URLSearchParams(window.location.search).get("productId"),
+    );
+    setProductId(
+      Number.isSafeInteger(selectedProduct) && selectedProduct > 0
+        ? String(selectedProduct)
+        : "",
+    );
     setConfirmCancel(false);
     checkoutAttempt.current = null;
-  }, [scopeId, api, initialProductId]);
+  }, [scopeId, api]);
 
   useEffect(() => {
-    if (initialProductId) return undefined;
     const params = new URLSearchParams(window.location.search);
     const id = Number(params.get("orderId"));
     if (
@@ -113,19 +99,13 @@ function ShopCartContent({
     api
       .order(scopeId, id, controller.signal)
       .then((data) => {
-        if (!controller.signal.aborted) {
-          setOrder(data);
-          if (data.status === "pending" && params.get("paymentResult") === "cancelled")
-            setNotice("پرداخت انجام نشد. سفارش شما در انتظار پرداخت است.");
-          else if (data.status === "pending" && params.get("paymentResult") === "verification_unavailable")
-            setNotice("بررسی پرداخت فعلاً در دسترس نیست. وضعیت پرداخت را دوباره بررسی کنید.");
-        }
+        if (!controller.signal.aborted) setOrder(data);
       })
       .catch((err) => {
         if (!controller.signal.aborted) setError(err.message);
       });
     return () => controller.abort();
-  }, [api, scopeId, initialProductId]);
+  }, [api, scopeId]);
 
   async function run(operation) {
     setBusy(true);
@@ -159,69 +139,223 @@ function ShopCartContent({
         key: crypto.randomUUID(),
       };
     }
-    let created;
-    try {
-      const url = await checkoutAndPay(api, scopeId, {
-        checkoutKey: checkoutAttempt.current.key,
-        cartVersion: cart.version,
-        address,
-        note,
-        ...(promoCode.trim() ? { promoCode: promoCode.trim() } : {}),
-      }, (order) => { created = order; });
-      onPayment(url);
-    } catch (err) {
-      if (created) {
-        setOrder(created);
-        setConfirmCancel(false);
-        checkoutAttempt.current = null;
-        throw new Error(`سفارش ثبت شد اما اتصال به درگاه ناموفق بود. پرداخت را دوباره امتحان کنید. ${err.message}`);
-      }
-      throw err;
-    }
+    const created = await api.checkout(scopeId, {
+      checkoutKey: checkoutAttempt.current.key,
+      cartVersion: cart.version,
+      address,
+      note,
+      ...(promoCode.trim() ? { promoCode: promoCode.trim() } : {}),
+    });
+    setOrder(created);
+    setConfirmCancel(false);
+    checkoutAttempt.current = null;
+    setNotice("سفارش ثبت شد. برای تکمیل خرید پرداخت را انجام دهید.");
   }
 
   return (
     <section className="sm-management" dir="rtl">
-      <h1>{order ? "جزئیات سفارش" : showOrders ? "سفارش‌های پرداخت‌شده" : "سبد خرید"}</h1>
+      <div className="sm-header">
+        <h1>سبد خرید</h1>
+        <div className="sm-toolbar">
+          {[
+            ["search", "جستجوی محصول"],
+            ["level", "سطح دوره"],
+            ["minPrice", "حداقل قیمت (ریال)"],
+            ["maxPrice", "حداکثر قیمت (ریال)"],
+          ].map(([key, label]) => (
+            <label key={key}>
+              {label}
+              <input
+                value={filters[key]}
+                maxLength={key.includes("Price") ? 14 : 200}
+                onChange={(event) => {
+                  setFilters({ ...filters, [key]: event.target.value });
+                  setPage(1);
+                }}
+              />
+            </label>
+          ))}
+          <label>
+            مرتب‌سازی
+            <select
+              value={filters.sort}
+              onChange={(event) => {
+                setFilters({ ...filters, sort: event.target.value });
+                setPage(1);
+              }}
+            >
+              <option value="newest">جدیدترین</option>
+              <option value="price-asc">ارزان‌ترین</option>
+              <option value="price-desc">گران‌ترین</option>
+              <option value="popular">پرفروش‌ترین</option>
+            </select>
+          </label>
+        </div>
+        {lessons && (
+          <section className="sm-card">
+            <h2>{lessons.title}</h2>
+            {lessons.itemGroups.map((group, index) => (
+              <div key={index}>
+                <h3>{group.name}</h3>
+                {group.items.map((item, index) => (
+                  <p key={index}>
+                    <strong>{item.key}: </strong>
+                    {/^https?:\/\//.test(item.value) ? (
+                      <a
+                        href={item.value}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        مشاهده درس یا فایل
+                      </a>
+                    ) : (
+                      <span>{item.value}</span>
+                    )}
+                  </p>
+                ))}
+              </div>
+            ))}
+            <button onClick={() => setLessons(null)}>بستن درس‌ها</button>
+          </section>
+        )}
+
+        <button
+          type="button"
+          disabled={busy || loading}
+          onClick={() => setRevision((value) => value + 1)}
+        >
+          تازه‌سازی
+        </button>
+      </div>
       {error && (
         <p role="alert" className="sm-error">
           {error}
-          {!order && initialProductId && !cart?.items.some((item) => item.productId === initialProductId) && (
-            <button type="button" disabled={busy} onClick={() => run(() => addSelectedProduct(api, scopeId, initialProductId))}>تلاش مجدد برای افزودن محصول</button>
-          )}
         </p>
       )}
       {notice && <p role="status">{notice}</p>}
-      {loading || loadedProductId !== (initialProductId ?? null) ? (
-        <p role="status">{showOrders ? "در حال دریافت سفارش‌ها…" : "در حال دریافت فروشگاه…"}</p>
+      {loading ? (
+        <p role="status">در حال دریافت فروشگاه…</p>
       ) : (
-        cart && !order && (
+        cart && (
           <>
-            <div className="store-cart-items">
-              {cart.items.map((item) => (
-                <div className="store-cart-item" key={item.productId}>
-                  <div className="store-cart-item-info">
-                    <strong>{item.title}</strong>
-                    <span>{money(item.totalRials)}{!item.available && " — ناموجود"}</span>
-                  </div>
-                  <div className="store-cart-controls" aria-label={`تعداد ${item.title}`}>
-                    <button type="button" disabled={busy || item.quantity <= 1} aria-label={`کاهش تعداد ${item.title}`} onClick={() => run(() => api.setItem(scopeId, item.productId, item.quantity - 1))}>−</button>
-                    <span>{item.quantity.toLocaleString("fa-IR")}</span>
-                    <button type="button" disabled={busy || item.quantity >= 9999} aria-label={`افزایش تعداد ${item.title}`} onClick={() => run(() => api.setItem(scopeId, item.productId, item.quantity + 1))}>+</button>
-                    <button type="button" className="store-cart-remove" disabled={busy} onClick={() => run(() => api.removeItem(scopeId, item.productId))}>حذف</button>
-                  </div>
-                </div>
-              ))}
+            <form
+              className="sm-order-actions"
+              onSubmit={(event) => {
+                event.preventDefault();
+                run(async () => {
+                  await api.setItem(scopeId, Number(productId), quantity);
+                  setProductId("");
+                });
+              }}
+            >
+              <label>
+                محصول
+                <select
+                  required
+                  value={productId}
+                  disabled={busy}
+                  onChange={(event) => setProductId(event.target.value)}
+                >
+                  <option value="">انتخاب محصول</option>
+                  {productId &&
+                    !catalog.items.some(
+                      (item) => String(item.id) === productId,
+                    ) && <option value={productId}>محصول انتخاب‌شده</option>}
+
+                  {catalog.items.map((product) => (
+                    <option
+                      key={product.id}
+                      value={product.id}
+                      disabled={product.stock < 1}
+                    >
+                      {product.title} — {money(product.priceRials)}
+                      {product.ratingCount
+                        ? ` · ${Number(product.averageRating).toLocaleString("fa-IR", { maximumFractionDigits: 1 })} از ۵ (${product.ratingCount})`
+                        : ""}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                تعداد
+                <input
+                  type="number"
+                  required
+                  min="1"
+                  max="9999"
+                  value={quantity}
+                  disabled={busy}
+                  onChange={(event) => setQuantity(Number(event.target.value))}
+                />
+              </label>
+              <button type="submit" disabled={busy || !productId}>
+                افزودن / تغییر تعداد
+              </button>
+            </form>
+            <div className="sm-pagination">
+              <button
+                type="button"
+                disabled={page === 1 || busy}
+                onClick={() => {
+                  setProductId("");
+                  setPage((value) => value - 1);
+                }}
+              >
+                محصولات قبلی
+              </button>
+              <button
+                type="button"
+                disabled={page * 50 >= catalog.total || busy}
+                onClick={() => {
+                  setProductId("");
+                  setPage((value) => value + 1);
+                }}
+              >
+                محصولات بعدی
+              </button>
+            </div>
+            <div className="sm-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>محصول</th>
+                    <th>تعداد</th>
+                    <th>جمع</th>
+                    <th>وضعیت</th>
+                    <th>حذف</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cart.items.map((item) => (
+                    <tr key={item.productId}>
+                      <td>{item.title}</td>
+                      <td>{item.quantity}</td>
+                      <td>{money(item.totalRials)}</td>
+                      <td>{item.available ? "موجود" : "ناموجود"}</td>
+                      <td>
+                        <button
+                          type="button"
+                          disabled={busy}
+                          onClick={() =>
+                            run(() => api.removeItem(scopeId, item.productId))
+                          }
+                        >
+                          حذف
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
             {!cart.items.length && <p>سبد خرید خالی است.</p>}
-            <p className="store-cart-total"><span>جمع سبد خرید</span><strong>{money(cart.totalRials)}</strong></p>
-            {cart.items.length > 0 && <form className="store-checkout"
+            <p>جمع سبد: {money(cart.totalRials)}</p>
+            <form
               onSubmit={(event) => {
                 event.preventDefault();
                 run(checkout);
               }}
             >
-              <details className="store-checkout-optional"><summary>کد تخفیف، نشانی و یادداشت</summary>
               <label>
                 کد تخفیف
                 <input
@@ -251,7 +385,6 @@ function ShopCartContent({
                   onChange={(event) => setNote(event.target.value)}
                 />
               </label>
-              </details>
               <button
                 type="submit"
                 disabled={
@@ -260,15 +393,13 @@ function ShopCartContent({
                   cart.items.some((item) => !item.available)
                 }
               >
-                {busy ? "در حال اتصال به درگاه…" : "ثبت سفارش و پرداخت"}
+                ثبت سفارش
               </button>
-            </form>}
+            </form>
           </>
         )
       )}
-      {!order && !loading && <details className="store-orders" open={showOrders || undefined}>
-      <summary>{showOrders ? "انتخاب سفارش" : "سفارش‌های قبلی"}</summary>
-      {!orders.items.length && <p>{showOrders ? "سفارش پرداخت‌شده‌ای وجود ندارد." : "هنوز سفارشی ثبت نشده است."}</p>}
+      <h2>سفارش‌های من</h2>
       {orders.items.map((item) => (
         <p key={item.id}>
           <button
@@ -302,43 +433,50 @@ function ShopCartContent({
           بعدی
         </button>
       </div>
-      </details>}
       {order && (
         <section className="sm-order-detail" aria-label="سفارش انتخاب‌شده">
-          {paidReturn && <div className="success-box">
-            <div className="success-icon">✓</div><h4>پرداخت با موفقیت انجام شد</h4>
-            <p>شماره سفارش را نگه دارید. مدارک را می‌توانید حالا یا بعداً تکمیل کنید.</p>
-            <div className="tracking-code">{Number(order.id).toLocaleString("fa-IR")}</div>
-          </div>}
-          {paidReturn && scopeId === 0 && <OrderDocuments api={api} scopeId={scopeId} orderId={order.id} />}
-          <button type="button" className="store-order-back" disabled={busy} onClick={() => { setOrder(null); setConfirmCancel(false); }}>{showOrders ? "بازگشت به سفارش‌ها" : "بازگشت به سبد خرید"}</button>
-          <div className="store-order-heading">
-            <div><span>شماره سفارش</span><h2>#{Number(order.id).toLocaleString("fa-IR")}</h2></div>
-            <span className={`store-order-status status-${order.status}`}>{statuses[order.status] || order.status}</span>
-          </div>
-          <div className="store-order-products">
-            <h3>محصولات سفارش</h3>
-            {order.products.map((product) => (
-              <div className="store-order-product" key={product.id}>
-                <div><strong>{product.title}</strong><span>تعداد: {Number(product.quantity).toLocaleString("fa-IR")}</span></div>
-                <strong>{money(product.totalRials)}</strong>
-              </div>
+          <h2>سفارش {order.id}</h2>
+          <p>
+            {statuses[order.status]} — {money(order.totalRials)}
+          </p>
+          {Number(order.discountRials) > 0 && (
+            <p>
+              کد تخفیف: {order.promoCode} — تخفیف: {money(order.discountRials)}{" "}
+              — جمع قبل از تخفیف: {money(order.subtotalRials)}
+            </p>
+          )}
+          {["paid", "fulfilled"].includes(order.status) &&
+            api.lessons &&
+            order.products.map((product) => (
+              <button
+                key={product.productId}
+                disabled={busy}
+                onClick={async () => {
+                  setBusy(true);
+                  setError("");
+                  try {
+                    setLessons(await api.lessons(scopeId, product.productId));
+                  } catch (error) {
+                    setError(error.message);
+                  } finally {
+                    setBusy(false);
+                  }
+                }}
+              >
+                درس‌های {product.title}
+              </button>
             ))}
-          </div>
-          <div className="store-order-totals">
-            {Number(order.discountRials) > 0 && <>
-              <div><span>جمع محصولات</span><span>{money(order.subtotalRials)}</span></div>
-              <div><span>تخفیف{order.promoCode ? ` (${order.promoCode})` : ""}</span><span>− {money(order.discountRials)}</span></div>
-            </>}
-            <div className="store-order-payable"><strong>مبلغ سفارش</strong><strong>{money(order.totalRials)}</strong></div>
-          </div>
-          {(order.transactionId || order.payment?.referenceId) && <div className="store-order-references">
-            {order.transactionId && <div><span>شناسه تراکنش</span><strong>{order.transactionId}</strong></div>}
-            {order.payment?.referenceId && <div><span>کد پیگیری پرداخت</span><strong>{order.payment.referenceId}</strong></div>}
-          </div>}
-          {!paidReturn && scopeId === 0 && ["paid", "fulfilled"].includes(order.status) && <OrderDocuments api={api} scopeId={scopeId} orderId={order.id} />}
+          {order.products.map((product) => (
+            <p key={product.id}>
+              {product.title} × {product.quantity} — {money(product.totalRials)}
+            </p>
+          ))}
+          <p>
+            شناسه تراکنش: {order.transactionId || "—"} — کد پیگیری:{" "}
+            {order.payment?.referenceId || "—"}
+          </p>
           {order.status === "pending" && (
-            <div className="sm-order-actions store-order-actions">
+            <div className="sm-order-actions">
               <button
                 type="button"
                 disabled={busy}
@@ -355,7 +493,6 @@ function ShopCartContent({
               </button>
               {order.payment && (
                 <button
-                  className="sm-secondary"
                   type="button"
                   disabled={busy}
                   onClick={() =>
@@ -375,7 +512,6 @@ function ShopCartContent({
               )}
               {order.canCancel && !confirmCancel && (
                 <button
-                  className="sm-secondary"
                   type="button"
                   disabled={busy}
                   onClick={() => setConfirmCancel(true)}
@@ -384,7 +520,7 @@ function ShopCartContent({
                 </button>
               )}
               {confirmCancel && (
-                <div className="store-order-confirm">
+                <div>
                   <p>سفارش {order.id} لغو شود؟</p>
                   <button
                     type="button"
@@ -399,7 +535,6 @@ function ShopCartContent({
                     تأیید لغو
                   </button>
                   <button
-                    className="sm-secondary"
                     type="button"
                     disabled={busy}
                     onClick={() => setConfirmCancel(false)}
@@ -416,13 +551,10 @@ function ShopCartContent({
   );
 }
 export function ShopCart(props) {
-  return <ShopCartContent key={`${props.scopeId}:${props.initialProductId ?? "cart"}`} {...props} />;
+  return <ShopCartContent key={props.scopeId} {...props} />;
 }
 ShopCartContent.propTypes = ShopCart.propTypes = {
   api: PropTypes.object.isRequired,
   scopeId: PropTypes.number.isRequired,
-  initialProductId: PropTypes.number,
-  showOrders: PropTypes.bool,
-  initialAddress: PropTypes.string,
   onPayment: PropTypes.func,
 };
