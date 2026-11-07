@@ -39,8 +39,8 @@ export function createShopApi({
         `/catalog?${new URLSearchParams({ page: String(page), ...filters })}`,
         { signal },
       ),
-    lessons: (scope, productId) =>
-      request(scope, `/products/${productId}/lessons`),
+    lessons: (scope, productId, signal) =>
+      request(scope, `/products/${productId}/lessons`, { signal }),
 
     catalog: (scope, page = 1, signal) =>
       request(scope, `/products?page=${page}`, { signal }),
