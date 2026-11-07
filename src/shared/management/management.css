@@ -168,7 +168,7 @@
   font: inherit;
   color: #7a7a9d;
 }
-.sm-nav-group > button {
+.sm-nav-group > a {
   display: flex;
   align-items: center;
   gap: 14px;
@@ -181,9 +181,10 @@
   text-align: right;
   font: inherit;
   cursor: pointer;
+  text-decoration: none;
 }
-.sm-nav-group > button:hover,
-.sm-nav-group > button.sm-nav-active {
+.sm-nav-group > a:hover,
+.sm-nav-group > a.sm-nav-active {
   background: white;
   color: #fd6757;
 }
@@ -196,31 +197,7 @@
   border-radius: 10px;
   background: white;
 }
-.sm-nav-arrow {
-  margin-inline-start: auto;
-}
-.sm-nav-children {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 4px 50px 8px 12px;
-  border-inline-start: 2px solid #f1d9d5;
-  padding-inline-start: 8px;
-}
-.sm-nav-children a {
-  display: block;
-  padding: 10px 12px;
-  border-radius: 8px;
-  text-decoration: none;
-  color: #7a7a9d;
-}
-.sm-nav-children a:hover,
-.sm-nav-children a[aria-current="page"] {
-  background: white;
-  color: #fd6757;
-}
-.sm-nav-group button:focus-visible,
-.sm-nav-children a:focus-visible {
+.sm-nav-group > a:focus-visible {
   outline: 2px solid var(--sm-accent, #e96554);
   outline-offset: 2px;
 }
